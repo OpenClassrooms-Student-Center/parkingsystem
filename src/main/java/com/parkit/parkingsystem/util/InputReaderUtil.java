@@ -12,8 +12,7 @@ public class InputReaderUtil {
 
     public int readSelection() {
         try {
-            int input = Integer.parseInt(scan.nextLine());
-            return input;
+            return Integer.parseInt(scan.nextLine());
         }catch(Exception e){
             logger.error("Error while reading user input from Shell", e);
             System.out.println("Error reading input. Please enter valid number for proceeding further");
