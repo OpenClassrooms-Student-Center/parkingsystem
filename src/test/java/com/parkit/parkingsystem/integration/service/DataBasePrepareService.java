@@ -1,9 +1,11 @@
 package com.parkit.parkingsystem.integration.service;
 
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+import org.junit.jupiter.api.Disabled;
 
 import java.sql.Connection;
 
+@Disabled
 public class DataBasePrepareService {
 
     DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
