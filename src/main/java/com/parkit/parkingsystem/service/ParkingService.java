@@ -10,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class ParkingService {
 
@@ -20,7 +19,7 @@ public class ParkingService {
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private TicketDAO ticketDAO;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -31,12 +30,17 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
+
             if(parkingSpot !=null && parkingSpot.getId() > 0){
-                String vehicleRegNumber = getVehichleRegNumber();
+
+                String vehicleRegNumber = getVehicleRegNumber();
+
                 parkingSpot.setAvailable(false);
+
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
                 LocalDateTime inTime = LocalDateTime.now();
+
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
                 //ticket.setId(ticketID);
@@ -55,31 +59,28 @@ public class ParkingService {
         }
     }
 
-    private String getVehichleRegNumber() throws Exception {
+    private String getVehicleRegNumber() throws Exception {
         System.out.println("Please type the vehicle registration number and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
-    }
+}
 
-    public ParkingSpot getNextParkingNumberIfAvailable(){
+    public ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
-        try{
-            ParkingType parkingType = getVehichleType();
-            parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-            if(parkingNumber > 0){
-                parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
-            }else{
-                throw new Exception("Error fetching parking number from DB. Parking slots might be full");
-            }
-        }catch(IllegalArgumentException ie){
-            logger.error("Error parsing user input for type of vehicle", ie);
-        }catch(Exception e){
-            logger.error("Error fetching next available parking slot", e);
+        ParkingType parkingType = getVehicleType();
+
+        parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
+        if (parkingNumber > 0) {
+            parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
+        } else {
+            Exception exception = new Exception("Error fetching parking number from DB. Parking slots might be full");
+            logger.error("Error fetching next available parking slot", exception);
+            throw exception;
         }
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType(){
+    private ParkingType getVehicleType() {
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -93,6 +94,7 @@ public class ParkingService {
             }
             default: {
                 System.out.println("Incorrect input provided");
+                logger.error("Error parsing user input for type of vehicle");
                 throw new IllegalArgumentException("Entered input is invalid");
             }
         }
@@ -100,7 +102,7 @@ public class ParkingService {
 
     public void processExitingVehicle() {
         try{
-            String vehicleRegNumber = getVehichleRegNumber();
+            String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             LocalDateTime outTime = LocalDateTime.now();
             ticket.setOutTime(outTime);

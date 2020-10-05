@@ -22,6 +22,7 @@ public class FareCalculatorService {
         double duration = (double)(Duration.between(ticket.getInTime(),ticket.getOutTime()).toMinutes())/60;
 
         ParkingType parkingType = ticket.getParkingSpot().getParkingType();
+
         if (parkingType == null) {
             throw new IllegalArgumentException("Unkown Parking Type");
         } else {
