@@ -8,18 +8,26 @@ import java.time.Duration;
 
 public class FareCalculatorService {
 
-    public void calculateFare(Ticket ticket){
-        if(ticket.getParkingSpot() == null) throw new IllegalArgumentException("No ParkingSpot provided");
-
-        if(ticket.getInTime() == null) throw new IllegalArgumentException("No In Time provided");
-
-        if(ticket.getOutTime() == null) throw new IllegalArgumentException("No Out Time provided");
-
-        if(ticket.getOutTime().isBefore(ticket.getInTime())){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+    public void calculateFare(Ticket ticket) {
+        if (ticket.getParkingSpot() == null) {
+            throw new IllegalArgumentException("No ParkingSpot provided");
         }
 
-        double duration = (double)(Duration.between(ticket.getInTime(),ticket.getOutTime()).toMinutes())/60;
+        if (ticket.getInTime() == null) {
+            throw new IllegalArgumentException("No In Time provided");
+        }
+
+        if (ticket.getOutTime() == null) {
+            throw new IllegalArgumentException("No Out Time provided");
+        }
+
+        if (ticket.getOutTime().isBefore(ticket.getInTime())) {
+            throw new IllegalArgumentException("Out time provided is incorrect:"
+                    + ticket.getOutTime().toString());
+        }
+
+        double duration = (double) (Duration.between(
+                ticket.getInTime(), ticket.getOutTime()).toMinutes()) / 60;
 
         ParkingType parkingType = ticket.getParkingSpot().getParkingType();
 
@@ -35,6 +43,7 @@ public class FareCalculatorService {
                     ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                     break;
                 }
+                default:
             }
         }
     }
