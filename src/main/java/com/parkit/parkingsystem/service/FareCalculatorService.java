@@ -16,6 +16,8 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         int duration = outHour - inHour;
 
+        //int durationWithoutBonusTime = this.bonusTime(duration);
+
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
                 ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
@@ -27,5 +29,15 @@ public class FareCalculatorService {
             }
             default: throw new IllegalArgumentException("Unkown Parking Type");
         }
+    }
+
+    private int bonusTime(int fareDuration) {
+        final int BONUS_TIME_IN_MILLISECONDS = 30 * 60 * 1000;
+
+        if (BONUS_TIME_IN_MILLISECONDS < fareDuration) {
+            return fareDuration - BONUS_TIME_IN_MILLISECONDS;
+        }
+
+        return 0;
     }
 }
