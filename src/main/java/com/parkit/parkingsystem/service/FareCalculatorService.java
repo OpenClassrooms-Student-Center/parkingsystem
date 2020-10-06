@@ -16,7 +16,7 @@ public class FareCalculatorService {
         //TODO: Some tests are failing here. Need to check if this logic is correct
         int duration = outHour - inHour;
 
-        //int durationWithoutBonusTime = this.bonusTime(duration);
+        int durationWithoutBonusTime = this.bonusTime(duration);
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
@@ -31,13 +31,13 @@ public class FareCalculatorService {
         }
     }
 
-    private int bonusTime(int fareDuration) {
+    public int bonusTime(int fareDuration) {
         final int BONUS_TIME_IN_MILLISECONDS = 30 * 60 * 1000;
 
         if (BONUS_TIME_IN_MILLISECONDS < fareDuration) {
             return fareDuration - BONUS_TIME_IN_MILLISECONDS;
         }
 
-        return 0;
+        return 1;
     }
 }
