@@ -11,24 +11,52 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDateTime;
 
+/**
+ * Service for Park.
+ */
 public class ParkingService {
 
+    /**
+     * @see Logger
+     */
     private static final Logger logger = LogManager.getLogger("ParkingService");
 
+    /**
+     * @see FareCalculatorService
+     */
     private static FareCalculatorService fareCalculatorService
             = new FareCalculatorService();
 
+    /**
+     * @see InputReaderUtil
+     */
     private InputReaderUtil inputReaderUtil;
+    /**
+     * @see ParkingSpotDAO
+     */
     private ParkingSpotDAO parkingSpotDAO;
+    /**
+     * @see TicketDAO
+     */
     private TicketDAO ticketDAO;
 
-    public ParkingService(InputReaderUtil inputReaderUtil,
-                          ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
+    /**
+     * Constructor.
+     * @param inputReaderUtil user selection
+     * @param parkingSpotDAO model parking spot
+     * @param ticketDAO model ticket
+     */
+    public ParkingService(final InputReaderUtil inputReaderUtil,
+                          final ParkingSpotDAO parkingSpotDAO,
+                          final TicketDAO ticketDAO) {
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
     }
 
+    /**
+     * Process when vehicle enter.
+     */
     public void processIncomingVehicle() {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -68,12 +96,22 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Get the vehicle registration number.
+     * @return vehicle registration number
+     * @throws Exception if vehicle reg number doesn't exist
+     */
     private String getVehicleRegNumber() throws Exception {
         logger.info("Please type the vehicle registration number "
                 + "and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
-}
+    }
 
+    /**
+     * Get the next parking number available.
+     * @return parking spot
+     * @throws Exception if parking is full
+     */
     public ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
         int parkingNumber = 0;
         ParkingSpot parkingSpot = null;
@@ -84,7 +122,8 @@ public class ParkingService {
             parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
         } else {
             Exception exception = new Exception("Error "
-                    + "fetching parking number from DB. Parking slots might be full");
+                    + "fetching parking number from DB."
+                    + "Parking slots might be full");
             logger.error("Error fetching next available parking slot",
                     exception);
             throw exception;
@@ -92,10 +131,14 @@ public class ParkingService {
         return parkingSpot;
     }
 
+    /**
+     * get the vehicle type.
+     * @return vehicle type
+     */
     private ParkingType getVehicleType() {
-        System.out.println("Please select vehicle type from menu");
-        System.out.println("1 CAR");
-        System.out.println("2 BIKE");
+        logger.info("Please select vehicle type from menu");
+        logger.info("1 CAR");
+        logger.info("2 BIKE");
         int input = inputReaderUtil.readSelection();
         switch (input) {
             case 1: {
@@ -112,6 +155,9 @@ public class ParkingService {
         }
     }
 
+    /**
+     * Process when vehicle exit.
+     */
     public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();

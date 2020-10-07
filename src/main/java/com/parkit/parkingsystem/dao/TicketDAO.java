@@ -13,20 +13,31 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
+/**
+ * Actions for tickets.
+ */
 public class TicketDAO {
 
+    /**
+     * @see Logger
+     */
     private static final Logger logger = LogManager.getLogger("TicketDAO");
-
+    /**
+     * @see DataBaseConfig
+     */
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket) {
+    /**
+     * Save ticket.
+     * @param ticket user ticket
+     * @return false
+     */
+    public boolean saveTicket(final Ticket ticket) {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps =
                     con.prepareStatement(DBConstants.SAVE_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-            //ps.setInt(1,ticket.getId());
             ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
@@ -43,7 +54,13 @@ public class TicketDAO {
         return false;
     }
 
-    public Ticket getTicket(String vehicleRegNumber) throws Exception {
+    /**
+     * Get the ticket.
+     * @param vehicleRegNumber from user
+     * @return ticket
+     * @throws Exception if no spot are available
+     */
+    public Ticket getTicket(final String vehicleRegNumber) throws Exception {
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -73,7 +90,12 @@ public class TicketDAO {
         return ticket;
     }
 
-    public boolean updateTicket(Ticket ticket) {
+    /**
+     * Update the ticket.
+     * @param ticket from user
+     * @return false
+     */
+    public boolean updateTicket(final Ticket ticket) {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();

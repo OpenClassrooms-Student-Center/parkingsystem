@@ -6,9 +6,16 @@ import com.parkit.parkingsystem.model.Ticket;
 
 import java.time.Duration;
 
+/**
+ * Service for fare calculator.
+ */
 public class FareCalculatorService {
 
-    public void calculateFare(Ticket ticket) {
+    /**
+     * Calculate fare.
+     * @param ticket from user
+     */
+    public void calculateFare(final Ticket ticket) {
         if (ticket.getParkingSpot() == null) {
             throw new IllegalArgumentException("No ParkingSpot provided");
         }
