@@ -56,11 +56,11 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
-                System.out.println("Generated Ticket and saved in DB");
-                System.out.println(
+                logger.info("Generated Ticket and saved in DB");
+                logger.info(
                         "Please park your vehicle in spot number:"
                                 + parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"
+                logger.info("Recorded in-time for vehicle number:"
                         + vehicleRegNumber + " is:" + inTime);
             }
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class ParkingService {
     }
 
     private String getVehicleRegNumber() throws Exception {
-        System.out.println("Please type the vehicle registration number "
+        logger.info("Please type the vehicle registration number "
                 + "and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
 }
@@ -105,7 +105,7 @@ public class ParkingService {
                 return ParkingType.BIKE;
             }
             default: {
-                System.out.println("Incorrect input provided");
+                logger.info("Incorrect input provided");
                 logger.error("Error parsing user input for type of vehicle");
                 throw new IllegalArgumentException("Entered input is invalid");
             }
@@ -123,12 +123,12 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                System.out.println("Please pay the parking fare:"
+                logger.info("Please pay the parking fare:"
                         + ticket.getPrice());
-                System.out.println("Recorded out-time for vehicle number:"
+                logger.info("Recorded out-time for vehicle number:"
                         + ticket.getVehicleRegNumber() + " is:" + outTime);
             } else {
-                System.out.println("Unable to update ticket information."
+                logger.info("Unable to update ticket information."
                         + "Error occurred");
             }
         } catch (Exception e) {
