@@ -16,17 +16,29 @@ import com.parkit.parkingsystem.model.Ticket;
         //TODO: Some tests are failing here. Need to check if this logic is correct
 <span class="fc" id="L17">        int duration = outHour - inHour;</span>
 
-<span class="pc bpc" id="L19" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
+<span class="fc" id="L19">        int durationWithoutBonusTime = this.bonusTime(duration);</span>
+
+<span class="pc bpc" id="L21" title="1 of 3 branches missed.">        switch (ticket.getParkingSpot().getParkingType()){</span>
             case CAR: {
-<span class="fc" id="L21">                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
-<span class="fc" id="L22">                break;</span>
+<span class="fc" id="L23">                ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);</span>
+<span class="fc" id="L24">                break;</span>
             }
             case BIKE: {
-<span class="fc" id="L25">                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);</span>
-<span class="fc" id="L26">                break;</span>
+<span class="fc" id="L27">                ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);</span>
+<span class="fc" id="L28">                break;</span>
             }
-<span class="nc" id="L28">            default: throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
+<span class="nc" id="L30">            default: throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
         }
-<span class="fc" id="L30">    }</span>
+<span class="fc" id="L32">    }</span>
+
+    public int bonusTime(int fareDuration) {
+<span class="fc" id="L35">        final int BONUS_TIME_IN_MILLISECONDS = 30 * 60 * 1000;</span>
+
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (BONUS_TIME_IN_MILLISECONDS &lt; fareDuration) {</span>
+<span class="nc" id="L38">            return fareDuration - BONUS_TIME_IN_MILLISECONDS;</span>
+        }
+
+<span class="fc" id="L41">        return 1;</span>
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
