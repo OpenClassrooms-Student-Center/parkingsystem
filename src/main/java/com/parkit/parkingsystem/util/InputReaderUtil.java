@@ -39,9 +39,8 @@ public class InputReaderUtil {
     /**
      * Read the vehicle registration number.
      * @return vehicle registration number
-     * @throws Exception if vehicle registration number is null
      */
-    public String readVehicleRegistrationNumber() throws Exception {
+    public String readVehicleRegistrationNumber() {
         try {
             String vehicleRegNumber = scan.nextLine();
             if (vehicleRegNumber == null
@@ -56,6 +55,4 @@ public class InputReaderUtil {
             throw e;
         }
     }
-
-
 }

@@ -20,7 +20,7 @@ public class InteractiveShell {
     /**
      * Load Interface depending on option.
      */
-    public static void loadInterface() {
+    public static void loadInterface() throws Exception {
         logger.info("App initialized!!!");
         logger.info("Welcome to Parking System!");
 

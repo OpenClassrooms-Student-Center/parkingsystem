@@ -19,7 +19,7 @@ public class ParkingService {
     /**
      * @see Logger
      */
-    private static final Logger logger = LogManager.getLogger("ParkingService");
+    private static final Logger logger = LogManager.getLogger(ParkingService.class);
 
     /**
      * @see FareCalculatorService
@@ -57,7 +57,7 @@ public class ParkingService {
     /**
      * Process when vehicle enter.
      */
-    public void processIncomingVehicle() {
+    public void processIncomingVehicle() throws Exception {
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 
@@ -93,6 +93,7 @@ public class ParkingService {
             }
         } catch (Exception e) {
             logger.error("Unable to process incoming vehicle", e);
+            throw e;
         }
     }
 
@@ -158,7 +159,7 @@ public class ParkingService {
     /**
      * Process when vehicle exit.
      */
-    public void processExitingVehicle() {
+    public void processExitingVehicle() throws Exception {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
@@ -179,6 +180,7 @@ public class ParkingService {
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
+            throw e;
         }
     }
 }

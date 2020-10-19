@@ -19,6 +19,10 @@ public class App {
      */
     public static void main(final String[] args) {
         LOGGER.info("Initializing Parking System");
-        InteractiveShell.loadInterface();
+        try {
+            InteractiveShell.loadInterface();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

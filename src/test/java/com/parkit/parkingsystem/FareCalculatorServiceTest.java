@@ -11,9 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class FareCalculatorServiceTest {
 
@@ -57,7 +55,7 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithFutureInTime(){
+    public void calculateFareBikeWithFutureInTime() {
         LocalDateTime outTime = LocalDateTime.now();
         LocalDateTime inTime = outTime.plusMinutes(60);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
@@ -69,19 +67,18 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareBikeWithNullOutTime(){
-        LocalDateTime outTime = null;
+    public void calculateFareBikeWithNullOutTime() {
         LocalDateTime inTime = LocalDateTime.now().plusMinutes(60);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
-        ticket.setOutTime(outTime);
+        ticket.setOutTime(null);
         ticket.setParkingSpot(parkingSpot);
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test
-    public void calculateFareBikeWithLessThanOneHourParkingTime(){
+    public void calculateFareBikeWithLessThanOneHourParkingTime() {
         LocalDateTime outTime = LocalDateTime.now();
         LocalDateTime inTime = outTime.minusMinutes(45);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
@@ -147,11 +144,10 @@ public class FareCalculatorServiceTest {
     public void calculateFareWithNullParkingSpot() {
         LocalDateTime outTime = LocalDateTime.now();
         LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = null;
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
-        ticket.setParkingSpot(parkingSpot);
+        ticket.setParkingSpot(null);
         assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 }
