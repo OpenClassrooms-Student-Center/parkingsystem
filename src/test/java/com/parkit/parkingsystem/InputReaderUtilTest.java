@@ -3,7 +3,6 @@ package com.parkit.parkingsystem;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -14,7 +13,6 @@ import java.util.Scanner;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InputReaderUtilTest {
@@ -23,11 +21,12 @@ public class InputReaderUtilTest {
 
     private static final InputStream stdin = System.in;
 
-    private InputStream inputStream;
 
     public void provideInput(String inputString) {
-        inputStream = new ByteArrayInputStream(inputString.getBytes());
-        System.setIn(inputStream);
+        inputReaderUtil = new InputReaderUtil();
+        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes());
+        Scanner scan = new Scanner(inputStream);
+        inputReaderUtil.setScan(scan);
     }
 
     @AfterEach
@@ -40,8 +39,6 @@ public class InputReaderUtilTest {
         final String inputString = "1";
         provideInput(inputString);
 
-        inputReaderUtil = new InputReaderUtil();
-
         assertEquals(1, inputReaderUtil.readSelection());
     }
 
@@ -49,8 +46,6 @@ public class InputReaderUtilTest {
     public void readSelectionTestException() {
         final String inputString = "test";
         provideInput(inputString);
-
-        inputReaderUtil = new InputReaderUtil();
 
         assertEquals(-1, inputReaderUtil.readSelection());
     }
@@ -60,8 +55,6 @@ public class InputReaderUtilTest {
         final String vehicleRegNumber = " ";
         provideInput(vehicleRegNumber);
 
-        inputReaderUtil = new InputReaderUtil();
-
         assertThrows(IllegalArgumentException.class, ()-> inputReaderUtil.readVehicleRegistrationNumber());
     }
 
@@ -69,8 +62,6 @@ public class InputReaderUtilTest {
     public void readVehicleRegistrationNumberTestValid() {
         final String vehicleRegNumber = "123 ABC 456";
         provideInput(vehicleRegNumber);
-
-        inputReaderUtil = new InputReaderUtil();
 
         assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
     }

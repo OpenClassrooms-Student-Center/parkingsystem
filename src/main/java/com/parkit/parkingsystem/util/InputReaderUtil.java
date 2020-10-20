@@ -13,12 +13,17 @@ public class InputReaderUtil {
     /**
      * @see Scanner
      */
-    private static Scanner scan = new Scanner(System.in);
+    private Scanner scan;
     /**
      * @see Logger
      */
     private static final Logger logger
             = LogManager.getLogger("InputReaderUtil");
+
+
+    public void setScan(final Scanner scan1) {
+        this.scan = scan1;
+    }
 
     /**
      * Read Selection.
