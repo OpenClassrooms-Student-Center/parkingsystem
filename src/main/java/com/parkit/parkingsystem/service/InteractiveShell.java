@@ -6,6 +6,8 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Scanner;
+
 /**
  * Interactive Shell with options.
  */
@@ -19,13 +21,14 @@ public class InteractiveShell {
 
     /**
      * Load Interface depending on option.
+     * @param scan : define input Scanner
      */
-    public static void loadInterface() throws Exception {
+    public static void loadInterface(final Scanner scan) throws Exception {
         logger.info("App initialized!!!");
         logger.info("Welcome to Parking System!");
 
         boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil();
+        InputReaderUtil inputReaderUtil = new InputReaderUtil(scan);
         ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
         TicketDAO ticketDAO = new TicketDAO();
         ParkingService parkingService =

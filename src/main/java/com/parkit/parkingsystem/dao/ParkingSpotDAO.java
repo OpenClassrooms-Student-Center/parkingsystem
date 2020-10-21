@@ -56,7 +56,7 @@ public class ParkingSpotDAO {
     /**
      * Update the availability for that parking spot.
      * @param parkingSpot parking spot concerned
-     * @return available as false.
+     * @return available as false
      */
     public boolean updateParking(final ParkingSpot parkingSpot) {
         Connection con = null;

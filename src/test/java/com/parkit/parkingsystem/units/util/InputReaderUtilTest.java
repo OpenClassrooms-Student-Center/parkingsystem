@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.units.util;
 
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
@@ -23,10 +23,9 @@ public class InputReaderUtilTest {
 
 
     public void provideInput(String inputString) {
-        inputReaderUtil = new InputReaderUtil();
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes());
         Scanner scan = new Scanner(inputStream);
-        inputReaderUtil.setScan(scan);
+        inputReaderUtil = new InputReaderUtil(scan);
     }
 
     @AfterEach
@@ -38,6 +37,7 @@ public class InputReaderUtilTest {
     public void readSelectionTest1() {
         final String inputString = "1";
         provideInput(inputString);
+
 
         assertEquals(1, inputReaderUtil.readSelection());
     }
