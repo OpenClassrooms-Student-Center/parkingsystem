@@ -16,43 +16,46 @@ public class InteractiveShell {
     /**
      * @see Logger
      */
-    private static final Logger logger =
+    private static final Logger LOGGER =
             LogManager.getLogger("InteractiveShell");
+
+    static InputReaderUtil inputReaderUtil = new InputReaderUtil(new Scanner(System.in));
+
+    private static ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
+
+    private static TicketDAO ticketDAO = new TicketDAO();
+
+    static ParkingService parkingService =
+            new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
     /**
      * Load Interface depending on option.
-     * @param scan : define input Scanner
      */
-    public static void loadInterface(final Scanner scan) throws Exception {
-        logger.info("App initialized!!!");
-        logger.info("Welcome to Parking System!");
+    public static void loadInterface() throws Exception {
+        LOGGER.info("App initialized!!!");
+        LOGGER.info("Welcome to Parking System!");
 
         boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil(scan);
-        ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
-        TicketDAO ticketDAO = new TicketDAO();
-        ParkingService parkingService =
-                new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
         while (continueApp) {
             loadMenu();
             int option = inputReaderUtil.readSelection();
             switch (option) {
-                case 1: {
+                case 1:
                     parkingService.processIncomingVehicle();
-                    break;
-                }
-                case 2: {
-                    parkingService.processExitingVehicle();
-                    break;
-                }
-                case 3: {
-                    logger.info("Exiting from the system!");
                     continueApp = false;
                     break;
-                }
-                default: logger.info("Unsupported option. Please "
+                case 2:
+                    parkingService.processExitingVehicle();
+                    continueApp = false;
+                    break;
+                case 3:
+                    LOGGER.info("Exiting from the system!");
+                    continueApp = false;
+                    break;
+                default:
+                    LOGGER.info("Unsupported option. Please "
                         + "enter a number corresponding to the provided menu");
+                    break;
             }
         }
     }
@@ -61,11 +64,10 @@ public class InteractiveShell {
      * Load Menu.
      */
     private static void loadMenu() {
-        logger.info("Please select an option."
+        LOGGER.info("Please select an option."
                 + "Simply enter the number to choose an action");
-        logger.info("1 New Vehicle Entering - Allocate Parking Space");
-        logger.info("2 Vehicle Exiting - Generate Ticket Price");
-        logger.info("3 Shutdown System");
+        LOGGER.info("1 New Vehicle Entering - Allocate Parking Space");
+        LOGGER.info("2 Vehicle Exiting - Generate Ticket Price");
+        LOGGER.info("3 Shutdown System");
     }
-
 }

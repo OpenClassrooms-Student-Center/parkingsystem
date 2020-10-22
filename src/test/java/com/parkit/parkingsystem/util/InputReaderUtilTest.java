@@ -1,6 +1,4 @@
-package com.parkit.parkingsystem.units.util;
-
-import com.parkit.parkingsystem.util.InputReaderUtil;
+package com.parkit.parkingsystem.util;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
