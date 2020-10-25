@@ -24,10 +24,6 @@ public class InputReaderUtil {
         this.scan = scan;
     }
 
-    public void setScan(final Scanner scan) {
-        this.scan = scan;
-    }
-
     /**
      * Read Selection.
      * @return input

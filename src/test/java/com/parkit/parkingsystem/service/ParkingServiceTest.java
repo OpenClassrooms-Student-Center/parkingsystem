@@ -5,8 +5,12 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.test.TestAppender;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,8 +28,9 @@ public class ParkingServiceTest {
 
     private static ParkingService parkingService;
 
-    @Mock
-    Logger logger;
+    private  static TestAppender appender;
+
+    private static Logger logger = LogManager.getLogger(ParkingService.class);
 
     @Mock
     private static InputReaderUtil inputReaderUtil;
@@ -33,6 +38,17 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+
+    @BeforeAll
+    public static void setUpBeforeAll() {
+        appender = new TestAppender();
+        ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
+    }
+
+    @AfterEach
+    public void cleanUp() {
+        appender.reset();
+    }
 
     @Test
     public void processIncomingVehicleCarTest() throws Exception {
@@ -127,15 +143,14 @@ public class ParkingServiceTest {
             assertThrows(NullPointerException.class, ()-> parkingService.processExitingVehicle());
     }
 
-    @Disabled
-    //TODO
     @Test
     public void processExitingVehicleElseCaseTest() throws Exception {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));
         ticket.setParkingSpot(parkingSpot);
-        ticket.setVehicleRegNumber("ABCDEF");
+
+
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
@@ -143,7 +158,7 @@ public class ParkingServiceTest {
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
         parkingService.processExitingVehicle();
-        assertEquals(Level.INFO, logger.getLevel());
+        assertEquals(2, appender.getLogCount());
     }
 
 }

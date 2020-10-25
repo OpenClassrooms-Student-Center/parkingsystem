@@ -6,8 +6,8 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class ParkingService {
     /**
      * @see Logger
      */
-    private static final Logger logger = LogManager.getLogger(ParkingService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ParkingService.class);
 
     /**
      * @see FareCalculatorService
