@@ -18,7 +18,7 @@ public class InputReaderUtil {
      * @see Logger
      */
     private static final Logger LOGGER
-            = LogManager.getLogger("InputReaderUtil");
+            = LogManager.getLogger(InputReaderUtil.class);
 
     public InputReaderUtil(final Scanner scan) {
         this.scan = scan;

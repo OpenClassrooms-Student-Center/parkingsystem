@@ -3,8 +3,8 @@ package com.parkit.parkingsystem.service;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Scanner;
 
@@ -17,7 +17,7 @@ public class InteractiveShell {
      * @see Logger
      */
     private static final Logger LOGGER =
-            LogManager.getLogger("InteractiveShell");
+            LoggerFactory.getLogger(InteractiveShell.class);
 
     static InputReaderUtil inputReaderUtil = new InputReaderUtil(new Scanner(System.in));
 

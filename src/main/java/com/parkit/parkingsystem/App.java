@@ -14,7 +14,7 @@ public class App {
     /**
      * @see Logger
      */
-    private static final Logger LOGGER = LogManager.getLogger("App");
+    private static final Logger LOGGER = LogManager.getLogger(App.class);
 
     /**
      * Main.
