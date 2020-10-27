@@ -51,7 +51,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleCarTest() throws Exception {
+    public void processIncomingVehicleTestCar() throws Exception {
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         Ticket ticket = new Ticket();
         ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR,false));
@@ -70,13 +70,13 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleExceptionTest() {
+    public void processIncomingVehicleTestException() {
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         assertThrows(Exception.class, ()-> parkingService.processIncomingVehicle());
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableCarTest() throws Exception{
+    public void getNextParkingNumberIfAvailableTestCar() throws Exception{
         ParkingType parkingType = ParkingType.CAR;
         ParkingSpot parkingSpot =  new ParkingSpot(1, parkingType, true);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -88,7 +88,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableBikeTest() throws Exception {
+    public void getNextParkingNumberIfAvailableTestBike() throws Exception {
         ParkingType parkingType = ParkingType.BIKE;
         ParkingSpot parkingSpot =  new ParkingSpot(1, parkingType, true);
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -100,7 +100,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableDefaultTest(){
+    public void getNextParkingNumberIfAvailableTestDefault(){
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         when(inputReaderUtil.readSelection()).thenReturn(3);
 
@@ -108,7 +108,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableCarNotAvailableTest() {
+    public void getNextParkingNumberIfAvailableTestCarNotAvailable() {
         ParkingType parkingType = ParkingType.CAR;
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
@@ -120,7 +120,7 @@ public class ParkingServiceTest {
 
 
     @Test
-    public void processExitingVehicleTest() throws Exception{
+    public void processExitingVehicleTestCar() throws Exception{
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));
@@ -138,13 +138,13 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleExceptionTest() {
+    public void processExitingVehicleTestException() {
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
             assertThrows(NullPointerException.class, ()-> parkingService.processExitingVehicle());
     }
 
     @Test
-    public void processExitingVehicleElseCaseTest() throws Exception {
+    public void processExitingVehicleTestElseCase() throws Exception {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));

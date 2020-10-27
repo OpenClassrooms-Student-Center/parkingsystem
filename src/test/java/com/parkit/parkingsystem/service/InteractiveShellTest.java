@@ -17,11 +17,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class InteractiveShellTest {
 
-    //private static MemoryAppender memoryAppender;
-    private static final String LOGGER_NAME = "com.parkit.parkingsystem.service.InteractiveShell";
-
-    private static InteractiveShell interactiveShell;
-
     private  static TestAppender appender;
 
     @Mock
@@ -50,7 +45,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTest1() throws Exception {
+    public void loadInterfaceTestWhenProcessIncomingVehicle() throws Exception {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
 
@@ -61,7 +56,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTest2() throws Exception {
+    public void loadInterfaceTestWhenProcessExitingVehicle() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(2);
 
         doNothing().when(parkingService).processExitingVehicle();
@@ -71,7 +66,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTest3() throws Exception {
+    public void loadInterfaceTestWhenExitInterface() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(3);
 
         InteractiveShell.loadInterface();

@@ -36,7 +36,6 @@ public class InputReaderUtilTest {
         final String inputString = "1";
         provideInput(inputString);
 
-
         assertEquals(1, inputReaderUtil.readSelection());
     }
 
@@ -49,7 +48,7 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void readVehicleRegistrationNumberTestNull() {
+    public void readVehicleRegistrationNumberTestInvalid() {
         final String vehicleRegNumber = " ";
         provideInput(vehicleRegNumber);
 
