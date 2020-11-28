@@ -5,6 +5,8 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.repository.IParkingSpotDAO;
+import com.parkit.parkingsystem.repository.ITicketDAO;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +28,9 @@ public class ParkingServiceTest {
     @Mock
     private static InputReaderUtil inputReaderUtil;
     @Mock
-    private static ParkingSpotDAO parkingSpotDAO;
+    private static IParkingSpotDAO parkingSpotDAO;
     @Mock
-    private static TicketDAO ticketDAO;
+    private static ITicketDAO ticketDAO;
 
     @BeforeEach
     private void setUpPerTest() {
@@ -57,5 +59,4 @@ public class ParkingServiceTest {
         parkingService.processExitingVehicle();
         verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
-
 }

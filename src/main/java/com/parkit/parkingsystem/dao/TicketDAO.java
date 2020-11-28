@@ -5,6 +5,7 @@ import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.repository.ITicketDAO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,7 +14,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 
-public class TicketDAO {
+
+public class TicketDAO implements ITicketDAO {
 
     private static final Logger logger = LogManager.getLogger("TicketDAO");
 
@@ -86,4 +88,5 @@ public class TicketDAO {
         }
         return false;
     }
+
 }

@@ -1,13 +1,18 @@
 package com.parkit.parkingsystem.service;
 
+import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.repository.IInputReaderUtil;
+import com.parkit.parkingsystem.repository.IParkingSpotDAO;
+import com.parkit.parkingsystem.repository.ITicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
 
 import java.util.Date;
 
@@ -17,11 +22,11 @@ public class ParkingService {
 
     private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
-    private InputReaderUtil inputReaderUtil;
-    private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private IInputReaderUtil inputReaderUtil;
+    private IParkingSpotDAO parkingSpotDAO;
+    private ITicketDAO ticketDAO;
 
-    public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
+    public ParkingService(IInputReaderUtil inputReaderUtil, IParkingSpotDAO parkingSpotDAO, ITicketDAO ticketDAO) {
         this.inputReaderUtil = inputReaderUtil;
         this.parkingSpotDAO = parkingSpotDAO;
         this.ticketDAO = ticketDAO;
@@ -31,7 +36,7 @@ public class ParkingService {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
-                String vehicleRegNumber = getVehichleRegNumber();
+                String vehicleRegNumber = getVehicleRegNumber();
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
@@ -54,8 +59,11 @@ public class ParkingService {
         }
     }
 
-    private String getVehichleRegNumber() throws Exception {
+    private String getVehicleRegNumber() {
         System.out.println("Please type the vehicle registration number and press enter key");
+
+
+
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
 
@@ -63,7 +71,7 @@ public class ParkingService {
         int parkingNumber=0;
         ParkingSpot parkingSpot = null;
         try{
-            ParkingType parkingType = getVehichleType();
+            ParkingType parkingType = getVehicleType();
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
@@ -78,7 +86,7 @@ public class ParkingService {
         return parkingSpot;
     }
 
-    private ParkingType getVehichleType(){
+    private ParkingType getVehicleType(){
         System.out.println("Please select vehicle type from menu");
         System.out.println("1 CAR");
         System.out.println("2 BIKE");
@@ -99,7 +107,7 @@ public class ParkingService {
 
     public void processExitingVehicle() {
         try{
-            String vehicleRegNumber = getVehichleRegNumber();
+            String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
             Date outTime = new Date();
             ticket.setOutTime(outTime);
@@ -117,4 +125,5 @@ public class ParkingService {
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
 }
