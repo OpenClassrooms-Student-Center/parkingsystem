@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -59,16 +60,14 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
       
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        System.out.println(ticket);
         assertEquals(ticket.getVehicleRegNumber(),"ABCDEF");
        
        assertEquals(ticket.getPrice(), 0);
        ticket.getInTime();
-       //assertThat(ticket.getInTime()).isNotNull();
+       assertThat(ticket.getInTime()).isNotNull();
        
-       
-      
-        
-       //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
+     //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability   
     }
 
     @Test
@@ -79,15 +78,13 @@ public class ParkingDataBaseIT {
         
         Ticket ticketParkingLotExit= ticketDAO.getTicket("ABCDEF");
         ticketParkingLotExit.setPrice(Fare.CAR_RATE_PER_HOUR);
-        assertNotNull(ticketParkingLotExit);
-      //assertThat(ticketParkingLotExit.getPrice()isNotNull());
-        
-        ticketParkingLotExit.getOutTime();
-       //assertThat(
-        
-   
-        
-        //TODO: check that the fare generated and out time are populated correctly in the database
+        assertNotNull(ticketParkingLotExit);           
+
+        //ticketParkingLotExit.getOutTime();
+        assertThat(ticketParkingLotExit.getOutTime()).isNotNull();
+        ticketParkingLotExit.getPrice();
+                
+     //TODO: check that the fare generated and out time are populated correctly in the database
     }
 
 }
