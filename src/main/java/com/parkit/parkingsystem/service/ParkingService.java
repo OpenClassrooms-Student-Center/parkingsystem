@@ -6,15 +6,34 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
+/**
+ * <b>ParkingService class is built to simulate process incoming and outgoing of vehicle in Park.
+ * </b>
+ * 
+ * @author laetitiadamen
+ * @version
+ */
 
 public class ParkingService {
 
+  /**
+   * Call Logger.
+   * 
+   * @param logger Logger's name is "ParkingService"
+   * @since 1.0
+   */
   private static final Logger logger = LogManager.getLogger("ParkingService");
 
+  /**
+   * Call class FareCalculatorService.
+   * 
+   * @param fareCalculatorService calling class FareCalculatorService
+   * @since 1.0
+   */
   private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
   private InputReaderUtil inputReaderUtil;
@@ -29,13 +48,27 @@ public class ParkingService {
   }
 
 
+  /**
+   * processIncomingVehicle is built to simulate incoming of vehicle in parking. In a
+   * try/catch/finally instruction, it will :
+   * <ul>
+   * <li>call getNextParkingNumberIfAvailable method</li>
+   * <li>update ParkingSpot</li>
+   * <li>set and save new ticket</li>
+   * </ul>
+   * 
+   * @param inTime inTime of incoming vehicle
+   * @since
+   * 
+   */
   public void processIncomingVehicle() {
     try {
       ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
       if (parkingSpot != null && parkingSpot.getId() > 0) {
         String vehicleRegNumber = getVehichleRegNumber();
         parkingSpot.setAvailable(false);
-        parkingSpotDAO.updateParking(parkingSpot);// allot this parking space and mark it's availability as false
+        // allot this parking space and mark it's availability as false
+        parkingSpotDAO.updateParking(parkingSpot);
 
         Date inTime = new Date();
         Ticket ticket = new Ticket();
@@ -58,12 +91,25 @@ public class ParkingService {
   }
 
 
+  /**
+   * getVehichleRegNumber is built to get vehicle regulation number with
+   * inputReaderUtil.readVehicleRegistrationNumber().
+   * 
+   * @return vehicle number
+   * @throws Exception incorrect vehicle regulation number
+   */
   private String getVehichleRegNumber() throws Exception {
     System.out.println("Please type the vehicle registration number and press enter key");
     return inputReaderUtil.readVehicleRegistrationNumber();
   }
 
 
+  /**
+   * getNextParkingNumberIfAvailable is built to get next parking number if available using
+   * parkingSpotDAO.getNextAvailableSlot(parkingType).
+   * 
+   * @return parkingSpot
+   */
   public ParkingSpot getNextParkingNumberIfAvailable() {
     int parkingNumber = 0;
     ParkingSpot parkingSpot = null;
@@ -84,35 +130,55 @@ public class ParkingService {
   }
 
 
+  /**
+   * getVehichleType is built to get the vehicle type using switch and
+   * inputReaderUtil.readSelection().
+   * 
+   * @return ParkingType.CAR car
+   * @return ParkingType.BIKE bike
+   */
   private ParkingType getVehichleType() {
     System.out.println("Please select vehicle type from menu");
     System.out.println("1 CAR");
     System.out.println("2 BIKE");
     int input = inputReaderUtil.readSelection();
     switch (input) {
-    case 1: {
-      return ParkingType.CAR;
-    }
-    case 2: {
-      return ParkingType.BIKE;
-    }
-    default: {
-      System.out.println("Incorrect input provided");
-      throw new IllegalArgumentException("Entered input is invalid");
-    }
+      case 1: {
+        return ParkingType.CAR;
+      }
+      case 2: {
+        return ParkingType.BIKE;
+      }
+      default: {
+        System.out.println("Incorrect input provided");
+        throw new IllegalArgumentException("Entered input is invalid");
+      }
     }
   }
 
 
+  /**
+   * processExitingVehicle is built to simulate outgoing of vehicle in parking. In a
+   * try/catch/finally instruction, it will :
+   * <ul>
+   * <li>call getTicket from ticketDAO</li>
+   * <li>set out time</li>
+   * <li>call calculateFare from fareCalculatorService</li>
+   * <li>call updateParking from ticketDAO</li>
+   * </ul>
+   * 
+   * @since
+   */
   public void processExitingVehicle() {
-    boolean recurrent = false; 
+    boolean recurrent = false;
     try {
       String vehicleRegNumber = getVehichleRegNumber();
       Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
       Date outTime = new Date();
       ticket.setOutTime(outTime);
-      //To do recurrent or not 
-      fareCalculatorService.calculateFare(ticket, recurrent);
+      if (recurrent == true) {
+        fareCalculatorService.calculateFare(ticket, recurrent);
+      }
       if (ticketDAO.updateTicket(ticket)) {
         ParkingSpot parkingSpot = ticket.getParkingSpot();
         parkingSpot.setAvailable(true);

@@ -5,20 +5,59 @@ import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+/**
+ * TicketDAO class is to built to stock ticket to the database.
+ * 
+ * <p>
+ * DAO means "Data Access Object". It use to separate how we stock data with the main code. So if
+ * stocking Data method change, only functional class will have be to changed.
+ * 
+ * @see DataBaseConfig
+ * @see DBConstants
+ * @see ParkingType
+ * @see ParkingSpot
+ * @see Ticket
+ * 
+ * @author laetitiadamen
+ * @version 3.0
+ */
 public class TicketDAO {
 
+  /**
+   * Call Logger.
+   * 
+   * @param logger Logger's name is "TicketDAO"
+   * @since 1.0
+   */
   private static final Logger logger = LogManager.getLogger("TicketDAO");
 
+  /**
+   * Call class DataBaseConfig.
+   * 
+   * @since 1.0
+   */
   public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+  /**
+   * saveTicket() method is built to save ticket in the database. In a try/catch/finally
+   * instruction, it will :
+   * <ul>
+   * <li>getConnection from Database in MySQL</li>
+   * <li>use prepareStatement of saving a ticket</li>
+   * <li>run query</li>
+   * <li>close connection</li>
+   * </ul>
+   * 
+   * @param ticket Ticket
+   * @return false
+   */
   public boolean saveTicket(Ticket ticket) {
     Connection con = null;
     try {
@@ -42,6 +81,21 @@ public class TicketDAO {
   }
 
 
+  /**
+   * getTicket() method is built to get in Database.
+   * <ul>
+   * <li>getConnection from Database in MySQL</li>
+   * <li>use prepareStatement of getting a ticket with the vehicle's Id (regNumber)</li>
+   * <li>if exist, run query</li>
+   * <li>close ResultSet</li>
+   * <li>close PreparedStatement</li>
+   * <li>return ticket</li>
+   * <li>close connection</li>
+   * </ul>
+   * 
+   * @param vehicleRegNumber register number of the vehicle
+   * @return ticket
+   */
   public Ticket getTicket(String vehicleRegNumber) {
     Connection con = null;
     Ticket ticket = null;
@@ -73,6 +127,21 @@ public class TicketDAO {
   }
 
 
+  /**
+   * updateTicket() is built to update ticket in DataBase.
+   * 
+   * In a try/catch/finally instruction, it will :
+   * <ul>
+   * <li>getConnection from Database in MySQL</li>
+   * <li>use prepareStatement of updating ticket</li>
+   * <li>run query</li>
+   * <li>close connection</li>
+   * </ul>
+   * 
+   * @param ticket Ticket
+   * @return false
+   * @since 1.0
+   */
   public boolean updateTicket(Ticket ticket) {
     Connection con = null;
     try {
@@ -90,4 +159,5 @@ public class TicketDAO {
     }
     return false;
   }
+
 }

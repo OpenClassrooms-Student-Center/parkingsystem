@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -73,9 +74,29 @@ public class ParkingDataBaseIT {
 
     ParkingSpot parkingSpot = ticket.getParkingSpot();
     parkingSpot.isAvailable();
-    assertThat(parkingSpot.isAvailable()).isEqualTo(true);
+    assertThat(parkingSpot.isAvailable()).isEqualTo(false);
 
-    // TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
+  }
+
+
+  // New Test in coming bike scenario
+  @Test
+  public void testParkingABike() throws Exception {
+    ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    parkingService.processIncomingVehicle();
+
+    Ticket ticket = ticketDAO.getTicket("ABCDEF");
+    System.out.println(ticket);
+    assertEquals(ticket.getVehicleRegNumber(), "ABCDEF");
+
+    assertEquals(ticket.getPrice(), 0);
+    ticket.getInTime();
+    assertThat(ticket.getInTime()).isNotNull();
+
+    ParkingSpot parkingSpot = ticket.getParkingSpot();
+    parkingSpot.isAvailable();
+    assertThat(parkingSpot.isAvailable()).isEqualTo(false);
+
   }
 
 
@@ -95,8 +116,26 @@ public class ParkingDataBaseIT {
     assertThat(ticketParkingLotExit.getPrice()).isEqualTo(1.5);
 
     ticketDAO.updateTicket(ticketParkingLotExit);
+  }
 
-    // TODO: check that the fare generated and out time are populated correctly in the database
+
+  @Test
+  // Test parking lot exit bike scenario
+  public void testBikeParkingLotExit() throws Exception {
+    testParkingABike();
+    ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+    parkingService.processExitingVehicle();
+
+    Ticket ticketParkingLotExit = ticketDAO.getTicket("ABCDEF");
+    ticketParkingLotExit.setPrice(Fare.BIKE_RATE_PER_HOUR);
+    assertNotNull(ticketParkingLotExit);
+
+    ticketParkingLotExit.getOutTime();
+    assertThat(ticketParkingLotExit.getOutTime()).isNotNull();
+    ticketParkingLotExit.getPrice();
+    assertThat(ticketParkingLotExit.getPrice()).isEqualTo(1);
+
+    ticketDAO.updateTicket(ticketParkingLotExit);
   }
 
 }

@@ -2,6 +2,22 @@ package com.parkit.parkingsystem.model;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 
+/**
+ * <b>ParkingSpotDAO class is built to stock ParkingSpot Data.</b>
+ * 
+ * <p>
+ * DAO means "Data Access Object". It is use to separate how we stock data with the main code. So if
+ * stocking Data method change, only functional class will have be to changed.
+ * 
+ * @see DataBaseConfig
+ * @see DBConstants
+ * @see ParkingType
+ * @see ParkingSpot
+ * 
+ * @author laetitiadamen
+ * 
+ */
+
 public class ParkingSpot {
   private int number;
   private ParkingType parkingType;

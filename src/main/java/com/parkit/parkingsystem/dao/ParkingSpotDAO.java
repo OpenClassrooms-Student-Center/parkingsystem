@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.dao;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
@@ -11,10 +12,44 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * ParkingSpotDAO class is built to connect parkingSpot and Database.
+ * 
+ * <p>
+ * DAO means "Data Access Object". It is use to separate how we stock data with the main code. So if
+ * stocking Data method change, only functional class will have be to changed.
+ * 
+ * @see DataBaseConfig
+ * @see DBConstants
+ * @see ParkingType
+ * @see ParkingSpot
+ * 
+ * @author laetitiadamen
+ * @version 3.0
+ */
+
 public class ParkingSpotDAO {
   private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
 
   public DataBaseConfig dataBaseConfig = new DataBaseConfig();
+
+  /**
+   * getNextAvailableSlot() method is built to get the next parking slot from Database.
+   * 
+   * * In a try/catch/finally instruction, it will :
+   * <ul>
+   * <li>getConnection from Database in MySQL</li>
+   * <li>use prepareStatement of getting next parking slot</li>
+   * <li>run query</li>
+   * <li>close ResultSet</li>
+   * <li>close PreparedStatement</li>
+   * <li>return the next available spot if no error</li>
+   * <li>close connection</li>
+   * </ul>
+   * 
+   * @param parkingType parking type of vehicle
+   * @return result
+   */
 
   public int getNextAvailableSlot(ParkingType parkingType) {
     Connection con = null;
@@ -39,8 +74,25 @@ public class ParkingSpotDAO {
   }
 
 
+  /**
+   * updateParking() method is built to update availability of the parking slot.
+   * 
+   * <p/>
+   * In a try/catch/finally instruction, it will :
+   * <ul>
+   * <li>getConnection from Database in MySQL</li>
+   * <li>use prepareStatement of updating parking spot</li>
+   * <li>run update</li>
+   * <li>close PreparedStatement</li>
+   * <li>return updating row</li>
+   * <li>close connection</li>
+   * </ul>
+   * 
+   * @param parkingSpot parking spot with ID and is available
+   * @return updateRowCount
+   */
+
   public boolean updateParking(ParkingSpot parkingSpot) {
-    // update the availability for that parking slot
     Connection con = null;
     try {
       con = dataBaseConfig.getConnection();

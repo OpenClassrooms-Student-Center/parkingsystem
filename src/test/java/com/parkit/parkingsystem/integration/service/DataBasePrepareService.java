@@ -1,9 +1,24 @@
 package com.parkit.parkingsystem.integration.service;
 
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
-
 import java.sql.Connection;
 
+/**
+ * <b>DataBasePrepareService is built to clear data base entries for virgin test.</b>
+ * 
+ * @see Fare
+ * @see ParkingSpotDAO
+ * @see TicketDAO
+ * @see DataBaseTestConfig
+ * @see DataBasePrepareService
+ * @see ParkingSpot
+ * @see Ticket
+ * @see ParkingService
+ * @see InputReaderUtil
+ * 
+ * @author laetitiadamen
+ * @version
+ */
 public class DataBasePrepareService {
 
   DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();

@@ -5,9 +5,41 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+/**
+ * <b>DataBaseConfig class is built to interact with DataBase in MySQL.</b>
+ * 
+ * <p>
+ * DataBase is composed with two tables :
+ * <ol>
+ * <li>Parking</li>
+ * <li>Ticket</li>
+ * </ol>
+ * 
+ * @author laëtitiadamen
+ * @version 3.0
+ */
+
 public class DataBaseConfig {
 
+  /**
+   * This class call Logger.
+   * 
+   * @param logger Logger's name is "DataBaseConfig"
+   * @since 1.0
+   */
+
   private static final Logger logger = LogManager.getLogger("DataBaseConfig");
+
+  /**
+   * getConnection() method is built to connect with Database in MySQL. Class.forName : Instantiate
+   * class with Full name class
+   * 
+   * @return DriverManager.getConnection permit to connect to DataBase with parameters as TimeZone,
+   * Id, password
+   * @throws ClassNotFoundException If class not found
+   * @throws SQLException If can't connect
+   * @since 3.0
+   */
 
   public Connection getConnection() throws ClassNotFoundException, SQLException {
     logger.info("Create DB connection");
@@ -15,6 +47,12 @@ public class DataBaseConfig {
     return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod", "root", "rootroot");
   }
 
+
+  /**
+   * closeConnection() method is built to close connection with Database.
+   * 
+   * @param con connection with Database
+   */
 
   public void closeConnection(Connection con) {
     if (con != null) {
@@ -28,6 +66,12 @@ public class DataBaseConfig {
   }
 
 
+  /**
+   * closePreparedStatement() is built to close preparedStatement used for request.
+   * 
+   * @param ps preparedStatement
+   */
+
   public void closePreparedStatement(PreparedStatement ps) {
     if (ps != null) {
       try {
@@ -39,6 +83,12 @@ public class DataBaseConfig {
     }
   }
 
+
+  /**
+   * closeResultSet() method is built to close the result.
+   * 
+   * @param rs result
+   */
 
   public void closeResultSet(ResultSet rs) {
     if (rs != null) {

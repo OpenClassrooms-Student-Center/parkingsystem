@@ -1,11 +1,18 @@
 package com.parkit.parkingsystem.integration.config;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
+import java.sql.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
-
+/**
+ * <b>DataBaseTestConfig is built to simulate DataBaseConfig for test.</b>
+ * 
+ * @see DataBaseConfig
+ * 
+ * @author laetitiadamen
+ * @version
+ */
 public class DataBaseTestConfig extends DataBaseConfig {
 
   private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
