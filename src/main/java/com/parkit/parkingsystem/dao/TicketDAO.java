@@ -160,4 +160,28 @@ public class TicketDAO {
     return false;
   }
 
+  public boolean recurrentCustomer(String vehicleRegNumber) {
+    Connection con = null;
+    boolean result = false;
+    ResultSet rs = null;
+    int count = 0; 
+    try {
+      con = dataBaseConfig.getConnection();
+      PreparedStatement ps = con.prepareStatement(DBConstants.RECURRENTCUSTOMER);      
+      ps.setString(1, vehicleRegNumber);      
+      rs = ps.executeQuery();
+      while (rs.next()) {
+        rs.getInt(1);
+        count = rs.getInt(1);
+      }
+      if (count >= 1) {
+        result = true; 
+      }
+    } catch (Exception ex) {
+      logger.error("Error fetching customer", ex);
+    } finally {
+      dataBaseConfig.closeConnection(con);
+      return result;
+    }
+  }
 }
