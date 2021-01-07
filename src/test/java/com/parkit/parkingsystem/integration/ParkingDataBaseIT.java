@@ -61,7 +61,7 @@ public class ParkingDataBaseIT {
 
         // THEN
         assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-        assertEquals(1, ticketDAO.getTicket("ABCDEF").getId());
+        Assert.assertNotNull("This object should not be null", ticketDAO.getTicket("ABCDEF"));
     }
 
     @Test
