@@ -7,6 +7,7 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
+import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.junit.jupiter.api.*;
@@ -62,9 +63,7 @@ public class ParkingDataBaseIT {
 
         // THEN
         assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-        // verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
-
-        //TODO: check that a ticket is actually saved in DB
+        assertEquals(1, ticketDAO.getTicket("ABCDEF").getId());
     }
 
     @Test
