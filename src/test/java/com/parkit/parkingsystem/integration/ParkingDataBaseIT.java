@@ -56,17 +56,15 @@ public class ParkingDataBaseIT {
     public void testParkingACar(){
         // GIVEN
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        int parkingNumber=0;
 
         // WHEN
         parkingService.processIncomingVehicle();
-        parkingNumber = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
 
         // THEN
-        assertEquals(2, parkingNumber );
+        assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
         // verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
+        //TODO: check that a ticket is actually saved in DB
     }
 
     @Test
