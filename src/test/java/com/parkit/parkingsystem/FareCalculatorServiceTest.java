@@ -180,14 +180,8 @@ public class FareCalculatorServiceTest {
     public void calculateFareKnownCarWithFivePercentReduction() {
         // GIVEN
         TicketDAO ticketDAO = new TicketDAO();
-        // TODO: faire que ce soit avec un vrai numéro de plaque déjà connu
-        String vehicleRegNumber = "cc111cc";
-        Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
+        ticketDAO.getTicket(ticket.getVehicleRegNumber());
 
-        Double reductionFactor = 1.00;
-        if(ticketDAO.getTicket(vehicleRegNumber).getOutTime() != null){
-            reductionFactor = 0.95;
-        }
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -198,7 +192,6 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        ticket.setPrice(ticket.getPrice() * reductionFactor);
 
         // THEN
         assertEquals( (0.95  * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
