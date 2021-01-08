@@ -9,16 +9,28 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
-    private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
+
+    @InjectMocks
+    private static FareCalculatorService fareCalculatorService;
+
+    @Mock
+    private TicketDAO ticketDAO;
 
     @BeforeAll
     private static void setUp() {
@@ -170,6 +182,8 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("CARUNDER30");
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         fareCalculatorService.calculateFare(ticket);
 
         // THEN

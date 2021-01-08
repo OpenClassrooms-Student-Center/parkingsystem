@@ -9,6 +9,8 @@ import java.util.Date;
 
 public class FareCalculatorService {
 
+    private TicketDAO ticketDAO = new TicketDAO();
+
     public void calculateFare(Ticket ticket){
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
@@ -19,7 +21,6 @@ public class FareCalculatorService {
 
         Duration duration = Duration.between(inHour.toInstant(), outHour.toInstant());
 
-        TicketDAO ticketDAO = new TicketDAO();
         double reductionFactor = 1;
         if( ticketDAO.getTicket(ticket.getVehicleRegNumber()).getOutTime() != null ){
             reductionFactor = 0.95;
