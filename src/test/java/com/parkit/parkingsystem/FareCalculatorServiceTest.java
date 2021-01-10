@@ -19,6 +19,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -189,13 +190,10 @@ public class FareCalculatorServiceTest {
         assertEquals( 0 , ticket.getPrice());
     }
 
-    @Disabled
     @Test
     public void calculateFareKnownCarWithFivePercentReduction() {
         // GIVEN
-        TicketDAO ticketDAO = new TicketDAO();
-        ticketDAO.getTicket(ticket.getVehicleRegNumber());
-
+        when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();
@@ -205,8 +203,6 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        ticket.setVehicleRegNumber("CARUNDER30");
-        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         fareCalculatorService.calculateFare(ticket);
 
         // THEN
