@@ -8,6 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -182,14 +183,13 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-        ticket.setVehicleRegNumber("CARUNDER30");
-        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         fareCalculatorService.calculateFare(ticket);
 
         // THEN
         assertEquals( 0 , ticket.getPrice());
     }
 
+    @Disabled
     @Test
     public void calculateFareKnownCarWithFivePercentReduction() {
         // GIVEN
@@ -205,6 +205,8 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("CARUNDER30");
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
         fareCalculatorService.calculateFare(ticket);
 
         // THEN
