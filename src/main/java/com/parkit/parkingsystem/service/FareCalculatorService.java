@@ -7,7 +7,7 @@ import com.parkit.parkingsystem.model.Ticket;
  * <b>FareCalculatorService class is built to be a calculator.</b>
  * 
  * @author laetitiadamen
- *
+ * 
  */
 
 public class FareCalculatorService {

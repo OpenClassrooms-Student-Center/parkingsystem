@@ -23,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
+import java.util.Date;
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -137,5 +138,16 @@ public class ParkingDataBaseIT {
 
     ticketDAO.updateTicket(ticketParkingLotExit);
   }
+  
+  //@Test 
+  //public void testIsRecurrentCustomer_FALSE() throws Exception {
+
+    /**
+     * GIVEN : call ParkingService
+     */
+    //ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+    
+  //}
 
 }
