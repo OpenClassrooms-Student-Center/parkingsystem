@@ -382,6 +382,7 @@ public class FareCalculatorServiceTest {
      * WHEN : Set parking spot
      */
     Date inTime = new Date();
+    // 1 hour parking
     inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
     Date outTime = new Date();
     ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
@@ -409,6 +410,7 @@ public class FareCalculatorServiceTest {
      * WHEN : Set parking spot
      */
     Date inTime = new Date();
+    // 1 hour parking
     inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
     Date outTime = new Date();
     ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
