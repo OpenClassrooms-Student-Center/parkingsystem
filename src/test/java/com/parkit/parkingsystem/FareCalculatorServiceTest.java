@@ -8,7 +8,6 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,7 +18,6 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
@@ -157,6 +155,8 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         // GIVEN
+        ticket.setVehicleRegNumber("abc");
+        when(ticketDAO.getEndedTicket(anyString())).thenReturn(null);
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
@@ -175,6 +175,8 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithThirtyMinutesFree(){
         // GIVEN
+        ticket.setVehicleRegNumber("abc");
+        when(ticketDAO.getEndedTicket(anyString())).thenReturn(ticket);
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  30 * 60 * 1000) );//30 minutes parking time should give a free parking fare
         Date outTime = new Date();
@@ -193,7 +195,8 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareKnownCarWithFivePercentReduction() {
         // GIVEN
-        when(ticketDAO.saveTicket(any(Ticket.class))).thenReturn(true);
+        ticket.setVehicleRegNumber("abc");
+        when(ticketDAO.getEndedTicket(anyString())).thenReturn(ticket);
         Date inTime = new Date();
         inTime.setTime( System.currentTimeMillis() - (  60 * 60 * 1000) );
         Date outTime = new Date();

@@ -22,7 +22,7 @@ public class FareCalculatorService {
         Duration duration = Duration.between(inHour.toInstant(), outHour.toInstant());
 
         double reductionFactor = 1;
-        if( ticketDAO.saveTicket(ticket) == true ){
+        if( ticketDAO.getEndedTicket(ticket.getVehicleRegNumber()) != null ){
             reductionFactor = 0.95;
         }
 

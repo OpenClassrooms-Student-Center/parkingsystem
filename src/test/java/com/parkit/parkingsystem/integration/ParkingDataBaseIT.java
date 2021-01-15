@@ -51,7 +51,6 @@ public class ParkingDataBaseIT {
 
     }
 
-    //TODO: Regarder pourquoi des tickets sont enrgistrés lors du lancement des tests (2 tickets avec 1 heure de décalage)
     @Test
     public void testParkingACar(){
         // GIVEN
