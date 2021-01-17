@@ -43,10 +43,6 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    void name() {
-    }
-
-    @Test
     public void calculateFareCar(){
         // GIVEN
         ticket.setVehicleRegNumber("abc");
