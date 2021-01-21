@@ -48,7 +48,7 @@ public class ParkingDataBaseIT {
 
     @AfterAll
     private static void tearDown(){
-
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test

@@ -20,7 +20,7 @@ public class TicketDAO {
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
     public boolean saveTicket(Ticket ticket){
-        logger.error("saveTicket inTime="+ticket.getInTime()+" outTime=" + ticket.getOutTime());
+        //logger.error("saveTicket inTime="+ticket.getInTime()+" outTime=" + ticket.getOutTime());
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
