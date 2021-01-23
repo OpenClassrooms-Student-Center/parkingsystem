@@ -3,6 +3,37 @@ package com.parkit.parkingsystem.model;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * <b> Ticket class is built to stock all methods referencing ticket. </b>
+ * 
+ * <p>
+ * Methods :
+ * <ul>
+ * <li>getId</li>
+ * <li>setId</li>
+ * <li>getParkingSpot</li>
+ * <li>setParkingSpot</li>
+ * <li>getVehicleRegNumber</li>
+ * <li>setVehicleRegNumber</li>
+ * <li>getPrice</li>
+ * <li>setPrice</li>
+ * <li>getInTime</li>
+ * <li>setInTime</li>
+ * <li>getOutTime</li>
+ * <li>setOutTime</li>
+ * </ul>
+ * 
+ * 
+ * @see DataBaseConfig
+ * @see DBConstants
+ * @see ParkingType
+ * 
+ * @author laetitiadamen
+ * @version 1.1
+ * 
+ */
+
+
 public class Ticket {
   private int id;
   private ParkingSpot parkingSpot;

@@ -14,8 +14,8 @@ import com.parkit.parkingsystem.model.ParkingSpot;
  * @see ParkingType
  * @see ParkingSpot
  * 
- * @author laetitia 
- * @version 3.0
+ * @author laetitiadamen 
+ * @version 1.1
  */
 @DisplayName("ParkingSpotTest")
 public class ParkingSpotTest {

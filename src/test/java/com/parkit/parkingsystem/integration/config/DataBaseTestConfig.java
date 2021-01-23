@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
  * @see DataBaseConfig
  * 
  * @author laetitiadamen
- * @version
+ * @version 1.1
  */
 public class DataBaseTestConfig extends DataBaseConfig {
 

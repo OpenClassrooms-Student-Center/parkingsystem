@@ -25,7 +25,7 @@ import java.sql.ResultSet;
  * @see ParkingSpot
  * 
  * @author laetitiadamen
- * @version 3.0
+ * @version 1.1
  */
 
 public class ParkingSpotDAO {

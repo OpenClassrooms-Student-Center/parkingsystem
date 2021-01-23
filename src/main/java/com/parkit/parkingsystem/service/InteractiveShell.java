@@ -22,7 +22,7 @@ import org.apache.logging.log4j.Logger;
  * @see InputReaderUtil
  * 
  * @author laetitiadamen
- * @version
+ * @version 1.1
  */
 
 public class InteractiveShell {

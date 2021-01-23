@@ -15,8 +15,8 @@ import java.sql.*;
  * <li>Ticket</li>
  * </ol>
  * 
- * @author laëtitiadamen
- * @version 3.0
+ * @author laetitiadamen
+ * @version 1.1
  */
 
 public class DataBaseConfig {

@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
  * <b>App is main class of the project. It is built to run the Park'it interface in console.</b>
  * 
  * @author laetitiadamen
- * @version 3.0
+ * @version 1.1
  */
 
 public class App {

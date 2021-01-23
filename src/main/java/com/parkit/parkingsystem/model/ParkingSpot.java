@@ -15,7 +15,7 @@ import com.parkit.parkingsystem.constants.ParkingType;
  * @see ParkingSpot
  * 
  * @author laetitiadamen
- * 
+ * @version 1.1
  */
 
 public class ParkingSpot {

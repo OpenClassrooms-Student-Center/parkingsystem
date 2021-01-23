@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  * @see FareCalculatorService
  * 
  * @author laetitiadamen
- * @version
+ * @version 1.1
  */
 public class FareCalculatorServiceTest {
 

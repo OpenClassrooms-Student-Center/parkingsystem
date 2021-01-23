@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * <b>ParkingServiceTest is built to unit test ParkingService.</b>
  * 
  * @author laetitiadamen
- * @version
+ * @version 1.1
  */
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {

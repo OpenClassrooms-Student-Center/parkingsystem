@@ -15,7 +15,7 @@ import org.apache.logging.log4j.Logger;
  * </b>
  * 
  * @author laetitiadamen
- * @version
+ * @version 1.1
  */
 
 public class ParkingService {

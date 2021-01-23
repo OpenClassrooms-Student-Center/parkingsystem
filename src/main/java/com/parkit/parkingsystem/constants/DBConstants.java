@@ -3,8 +3,8 @@ package com.parkit.parkingsystem.constants;
 /**
  * <b>DBConstants is built to stock all PreparedStatement of project.</b>
  * 
- * @author laëtitiadamen
- * @version 3.0
+ * @author laetitiadamen
+ * @version 1.1
  *
  */
 public class DBConstants {
