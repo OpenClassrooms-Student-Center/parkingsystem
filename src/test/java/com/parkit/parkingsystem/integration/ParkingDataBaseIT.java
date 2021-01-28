@@ -22,60 +22,60 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 
-    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
-    private static ParkingSpotDAO parkingSpotDAO;
-    private static TicketDAO ticketDAO;
-    private static DataBasePrepareService dataBasePrepareService;
+  private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+  private static ParkingSpotDAO parkingSpotDAO;
+  private static TicketDAO ticketDAO;
+  private static DataBasePrepareService dataBasePrepareService;
 
-    @Mock
-    private static InputReaderUtil inputReaderUtil;
+  @Mock
+  private static InputReaderUtil inputReaderUtil;
 
-    @BeforeAll
-    private static void setUp() throws Exception{
-        parkingSpotDAO = new ParkingSpotDAO();
-        parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseTestConfig;
-        dataBasePrepareService = new DataBasePrepareService();
-    }
+  @BeforeAll
+  private static void setUp() throws Exception {
+    parkingSpotDAO = new ParkingSpotDAO();
+    parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
+    ticketDAO = new TicketDAO();
+    ticketDAO.dataBaseConfig = dataBaseTestConfig;
+    dataBasePrepareService = new DataBasePrepareService();
+  }
 
-    @BeforeEach
-    private void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        dataBasePrepareService.clearDataBaseEntries();
-    }
+  @AfterAll
+  private static void tearDown() {
+    dataBasePrepareService.clearDataBaseEntries();
+  }
 
-    @AfterAll
-    private static void tearDown(){
-        dataBasePrepareService.clearDataBaseEntries();
-    }
+  @BeforeEach
+  private void setUpPerTest() throws Exception {
+    when(inputReaderUtil.readSelection()).thenReturn(1);
+    when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+    dataBasePrepareService.clearDataBaseEntries();
+  }
 
-    @Test
-    public void testParkingACar(){
-        // GIVEN
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+  @Test
+  public void testParkingACar() {
+    // GIVEN
+    ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        // WHEN
-        parkingService.processIncomingVehicle();
+    // WHEN
+    parkingService.processIncomingVehicle();
 
-        // THEN
-        assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-        Assert.assertNotNull("This object should not be null", ticketDAO.getTicket("ABCDEF"));
-    }
+    // THEN
+    assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
+    Assert.assertNotNull("This object should not be null", ticketDAO.getTicket("ABCDEF"));
+  }
 
-    @Test
-    public void testParkingLotExit(){
-        // GIVEN
-        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+  @Test
+  public void testParkingLotExit() {
+    // GIVEN
+    ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
-        // WHEN
-        parkingService.processIncomingVehicle();
-        parkingService.processExitingVehicle();
+    // WHEN
+    parkingService.processIncomingVehicle();
+    parkingService.processExitingVehicle();
 
-        //THEN
-        assertEquals(0, ticketDAO.getTicket("ABCDEF").getPrice());
-        Assert.assertNotNull("This object should not be null", ticketDAO.getTicket("ABCDEF").getOutTime());
-    }
+    //THEN
+    assertEquals(0, ticketDAO.getTicket("ABCDEF").getPrice());
+    Assert.assertNotNull("This object should not be null", ticketDAO.getTicket("ABCDEF").getOutTime());
+  }
 
 }
