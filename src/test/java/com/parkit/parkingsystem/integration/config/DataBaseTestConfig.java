@@ -19,16 +19,20 @@ public class DataBaseTestConfig extends DataBaseConfig {
   private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
 
   public Connection getConnection() throws ClassNotFoundException, SQLException, IOException {
-    Properties properties = new Properties();
     FileInputStream fis = new FileInputStream("src/main/resources/log4j.properties");
-    properties.load(fis);
-    String url = properties.getProperty("urltest");
-    String user = properties.getProperty("user");
-    String password = properties.getProperty("password");
+    try {
+      Properties properties = new Properties();
+      properties.load(fis);
+      String url = properties.getProperty("urltest");
+      String user = properties.getProperty("user");
+      String password = properties.getProperty("password");
 
-    logger.info("Create DB connection");
-    Class.forName("com.mysql.cj.jdbc.Driver");
-    return DriverManager.getConnection(url, user, password);
+      logger.info("Create DB connection");
+      Class.forName("com.mysql.cj.jdbc.Driver");
+      return DriverManager.getConnection(url, user, password);
+    } finally {
+      fis.close();
+    }
   }
 
   public void closeConnection(Connection con) {
