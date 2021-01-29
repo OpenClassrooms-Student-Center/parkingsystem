@@ -43,18 +43,23 @@ public class Ticket {
   }
 
   public Date getInTime() {
-    return (Date) this.inTime.clone();
+    return (Date) inTime.clone();
   }
 
-  public void setInTime(Date date) {
-    this.inTime = (Date) date.clone();
+  public void setInTime(Date inTime) {
+    this.inTime = (Date) inTime.clone();
   }
 
   public Date getOutTime() {
-    return outTime;
+    /*if (outTime == null) {
+      return null;
+    } else {
+      return (Date) outTime.clone();
+    }*/
+    return outTime == null ? null : (Date) outTime.clone();
   }
 
   public void setOutTime(Date outTime) {
-    this.outTime = outTime;
+    this.outTime = outTime == null ? null : (Date) outTime.clone();
   }
 }
