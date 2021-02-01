@@ -15,8 +15,7 @@ import java.sql.ResultSet;
 /**
  * ParkingSpotDAO class is built to connect parkingSpot and Database.
  * 
- * <p>
- * DAO means "Data Access Object". It is use to separate how we stock data with the main code. So if
+ *<p>DAO means "Data Access Object". It is use to separate how we stock data with the main code. So if
  * stocking Data method change, only functional class will have be to changed.
  * 
  * @see DataBaseConfig
