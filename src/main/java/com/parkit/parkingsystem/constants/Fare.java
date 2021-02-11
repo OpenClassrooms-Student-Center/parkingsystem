@@ -1,7 +1,7 @@
 package com.parkit.parkingsystem.constants;
 
 /**
- * <b>Fare class is built to stock fare for bike & car </b>
+ * <b>Fare class is built to stock fare for bike & car. </b>
  *
  * @author laetitiadamen
  * @version 1.1

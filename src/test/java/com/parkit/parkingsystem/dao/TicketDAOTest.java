@@ -19,7 +19,6 @@ import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
-
 /**
  * <b>TicketDAOIT is built to integration test TicketDAO.</b>
  * 
@@ -36,7 +35,7 @@ import com.parkit.parkingsystem.model.Ticket;
  */
 
 public class TicketDAOTest {
-  
+
   private static TicketDAO ticketDAO;
   private static DataBasePrepareService dataBasePrepareService;
 
@@ -47,11 +46,13 @@ public class TicketDAOTest {
     dataBasePrepareService.clearDataBaseEntries();
   }
 
+
   @AfterEach
   private void closeUpPerTest() throws Exception {
     dataBasePrepareService = new DataBasePrepareService();
     dataBasePrepareService.clearDataBaseEntries();
   }
+
 
   @Test
   @DisplayName("Test when saveTicket is called, DB should return info of this ticket")
@@ -96,13 +97,14 @@ public class TicketDAOTest {
 
   }
 
+
   @Test
   @DisplayName("Error fetching next slot")
   public void saveTicket_KO_TEST() {
 
     /**
-     * GIVEN : call ticketDAO.dataBaseConfig and set info of saving ticket with
-     * wrong Spot for Parking type a car
+     * GIVEN : call ticketDAO.dataBaseConfig and set info of saving ticket with wrong Spot for
+     * Parking type a car
      */
     ticketDAO.dataBaseConfig = new DataBaseTestConfig();
 
@@ -129,13 +131,14 @@ public class TicketDAOTest {
     assertThat(ticketInDB.getId()).isEqualTo(0);
   }
 
+
   @Test
   @DisplayName("Test when updateTicket is called, DB should return info of this ticket updated")
   public void updateTicket_TEST() throws InterruptedException {
 
     /**
-     * GIVEN : call ticketDAO.dataBaseConfig and set info of saving ticket. Wait one
-     * second and set new out time and price
+     * GIVEN : call ticketDAO.dataBaseConfig and set info of saving ticket. Wait one second and set
+     * new out time and price
      */
     ticketDAO.dataBaseConfig = new DataBaseTestConfig();
 
@@ -168,6 +171,7 @@ public class TicketDAOTest {
     assertTrue(ticketUpdated);
 
   }
+
 
   @Test
   @DisplayName("Test when a user own two ticket in DB should return recurrent customer")
@@ -213,4 +217,3 @@ public class TicketDAOTest {
     assertThat(recurrent_Customer).isTrue();
   }
 }
-

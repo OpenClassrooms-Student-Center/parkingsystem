@@ -17,7 +17,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
  * <b>ParkingSpotDAOIT is built to integration test ParkingSpotDAO.</b>
  * 
  * 
- * @see ParkingType 
+ * @see ParkingType
  * 
  * @see ParkingSpotDAO
  * @see DataBaseTestConfig
@@ -27,7 +27,6 @@ import com.parkit.parkingsystem.model.ParkingSpot;
  * @author laetitiadamen
  * @version 1.1
  */
-
 
 public class ParkingSpotDAOTest {
   private static ParkingSpotDAO parkingSpotDAO;
@@ -40,15 +39,17 @@ public class ParkingSpotDAOTest {
     dataBasePrepareService.clearDataBaseEntries();
   }
 
+
   @AfterEach
   private void closeUpPerTest() throws Exception {
     dataBasePrepareService.clearDataBaseEntries();
   }
 
+
   @Test
   @DisplayName("Verify that the next available spot for a CAR is spot 1 for empty DB")
   public void getNextAvailableSpotCar_TEST() {
-    
+
     /**
      * GIVEN
      */
@@ -62,6 +63,7 @@ public class ParkingSpotDAOTest {
     assertThat(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).isEqualTo(1);
 
   }
+
 
   @Test
   @DisplayName("Verify that the next available spot for BIKE is spot 4 for empty DB")
@@ -79,6 +81,7 @@ public class ParkingSpotDAOTest {
     assertThat(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).isEqualTo(4);
 
   }
+
 
   @Test
   @DisplayName("Verify that when updating parking, will get the next available CAR spot")
@@ -102,6 +105,7 @@ public class ParkingSpotDAOTest {
 
   }
 
+
   @Test
   @DisplayName("Verify that when updating parking, will get the next available BIKE spot")
   public void updateParkingSpotBike_TEST() {
@@ -123,6 +127,5 @@ public class ParkingSpotDAOTest {
     assertThat(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).isEqualTo(5);
 
   }
-
 
 }

@@ -13,10 +13,9 @@ import org.apache.logging.log4j.Logger;
  * @version 1.1
  */
 
-
 import java.util.Scanner;
 
-public class InputReaderUtil {  
+public class InputReaderUtil {
 
   /**
    * Call Scanner
@@ -31,7 +30,7 @@ public class InputReaderUtil {
    * 
    * @param logger Logger's name is "InputReaderUtil"
    * @since 1.0
-   */  
+   */
   private static final Logger logger = LogManager.getLogger("InputReaderUtil");
 
   /**
@@ -50,6 +49,7 @@ public class InputReaderUtil {
       return -1;
     }
   }
+
 
   /**
    * readVehicleRegistrationNumber is built to read Vehicle Registration Number

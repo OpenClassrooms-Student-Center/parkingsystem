@@ -175,9 +175,9 @@ public class ParkingService {
       String vehicleRegNumber = getVehichleRegNumber();
       Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
       Date outTime = new Date();
-      ticket.setOutTime(outTime); 
+      ticket.setOutTime(outTime);
       recurrent = ticketDAO.recurrentCustomer(vehicleRegNumber);
-      fareCalculatorService.calculateFare(ticket, recurrent);      
+      fareCalculatorService.calculateFare(ticket, recurrent);
       if (ticketDAO.updateTicket(ticket)) {
         ParkingSpot parkingSpot = ticket.getParkingSpot();
         parkingSpot.setAvailable(true);

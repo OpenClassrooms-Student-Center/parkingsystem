@@ -33,7 +33,6 @@ import java.util.Date;
  * 
  */
 
-
 public class Ticket {
   private int id;
   private ParkingSpot parkingSpot;

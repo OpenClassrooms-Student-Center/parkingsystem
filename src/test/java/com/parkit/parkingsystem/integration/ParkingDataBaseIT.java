@@ -25,12 +25,11 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-
 /**
- * <b>ParkingDataBaseIT is built to integration test incoming and outgoing of
- * vehicle in park.</b>  
+ * <b>ParkingDataBaseIT is built to integration test incoming and outgoing of vehicle in park.</b>
  * 
- * <p>Use DataBaseTestConfig and DataBasePrepareService
+ * <p>
+ * Use DataBaseTestConfig and DataBasePrepareService
  * 
  * @see Fare
  * @see ParkingSpotDAO
@@ -45,7 +44,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @author laetitiadamen
  * @version 1.1
  */
-
 
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
@@ -84,7 +82,7 @@ public class ParkingDataBaseIT {
 
   @Test
   public void testParkingACar() throws Exception {
-    
+
     // TODO: check that a ticket is actually saved in DB and Parking table is
     // updated with availability
 
@@ -99,8 +97,7 @@ public class ParkingDataBaseIT {
     parkingService.processIncomingVehicle();
 
     /**
-     * THEN : check that ticket is actually saved in DB and parking table is update
-     * in DB
+     * THEN : check that ticket is actually saved in DB and parking table is update in DB
      */
     Ticket ticket = ticketDAO.getTicket("ABCDEF");
     System.out.println(ticket);
@@ -120,7 +117,7 @@ public class ParkingDataBaseIT {
   // New Test in coming bike scenario
   @Test
   public void testParkingABike() throws Exception {
-    
+
     /**
      * GIVEN : call ParkingService
      */
@@ -132,10 +129,9 @@ public class ParkingDataBaseIT {
     parkingService.processIncomingVehicle();
 
     /**
-     * THEN : check that ticket is actually saved in DB and parking table is update
-     * in DB
+     * THEN : check that ticket is actually saved in DB and parking table is update in DB
      */
-    
+
     Ticket ticket = ticketDAO.getTicket("ABCDEF");
     System.out.println(ticket);
     assertEquals(ticket.getVehicleRegNumber(), "ABCDEF");
@@ -153,7 +149,7 @@ public class ParkingDataBaseIT {
 
   @Test
   public void testParkingLotExit() throws Exception {
-    
+
     // TODO: check that the fare generated and out time are populated correctly in
     // the database
 
@@ -187,13 +183,13 @@ public class ParkingDataBaseIT {
   @Test
   // Test parking lot exit bike scenario
   public void testBikeParkingLotExit() throws Exception {
-    
+
     /**
      * GIVEN : call ParkingService
      */
     testParkingABike();
     ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-    
+
     /**
      * WHEN : call parkingService.processExitingVehicle
      */
@@ -213,6 +209,5 @@ public class ParkingDataBaseIT {
 
     ticketDAO.updateTicket(ticketParkingLotExit);
   }
-  
 
 }

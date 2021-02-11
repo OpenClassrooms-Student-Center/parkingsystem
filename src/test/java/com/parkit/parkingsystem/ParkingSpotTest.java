@@ -14,7 +14,7 @@ import com.parkit.parkingsystem.model.ParkingSpot;
  * @see ParkingType
  * @see ParkingSpot
  * 
- * @author laetitiadamen 
+ * @author laetitiadamen
  * @version 1.1
  */
 @DisplayName("ParkingSpotTest")
@@ -46,6 +46,7 @@ public class ParkingSpotTest {
     assertThat(parkingSpot.hashCode()).isEqualTo(4);
 
   }
+
 
   @Test
   @DisplayName("Test to park a Car in Car Spot")

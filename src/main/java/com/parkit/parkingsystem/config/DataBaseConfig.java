@@ -1,9 +1,9 @@
 package com.parkit.parkingsystem.config;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.sql.*;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * <b>DataBaseConfig class is built to interact with DataBase in MySQL.</b>
@@ -16,6 +16,7 @@ import java.sql.*;
  * </ol>
  * 
  * @author laetitiadamen
+ * 
  * @version 1.1
  */
 
