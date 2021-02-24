@@ -7,7 +7,7 @@ import com.parkit.parkingsystem.model.Ticket;
 
 public class FareCalculatorService {
 
-	// TimeUnit convertit en millisecondes
+	// TimeUnit convertit en millisecondes to minutes
 	private static final double HOUR_IN_MILLISECONDS = TimeUnit.MINUTES.toMillis(60);
 	private static final double HALF_HOUR_IN_MILLISECONDS = TimeUnit.MINUTES.toMillis(30);
 
@@ -16,7 +16,7 @@ public class FareCalculatorService {
 			throw new IllegalArgumentException("Out time provided is incorrect:" + ticket.getOutTime());
 		}
 
-		// getTime renvoie des millisecondes
+		// getTime renvoie des millisecondes en minutes
 		double inHour = ticket.getInTime().getTime();
 		double outHour = ticket.getOutTime().getTime();
 
@@ -31,7 +31,7 @@ public class FareCalculatorService {
 		switch (ticket.getParkingSpot().getParkingType()) {
 		case CAR: {
 
-			ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) / HOUR_IN_MILLISECONDS);
+			ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR / HOUR_IN_MILLISECONDS);
 			break;
 		}
 		case BIKE: {
