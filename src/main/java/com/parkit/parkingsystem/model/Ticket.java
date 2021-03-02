@@ -10,6 +10,7 @@ public class Ticket {
 	private Date inTime;
 	private Date outTime;
 	public boolean isReccuringUser;
+	private double discount;
 
 	public int getId() {
 		return id;
@@ -59,8 +60,21 @@ public class Ticket {
 		this.outTime = outTime;
 	}
 
+	public boolean getAReccuringUser() {
+		return isReccuringUser;
+
+	}
+
 	public void setAReccuringUser(boolean isReccuringUser) {
 		this.isReccuringUser = isReccuringUser;
 
+	}
+
+	public double getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(double discount) {
+		this.discount = discount;
 	}
 }

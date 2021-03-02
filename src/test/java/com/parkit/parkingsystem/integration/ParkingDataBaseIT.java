@@ -1,7 +1,9 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -57,12 +59,16 @@ public class ParkingDataBaseIT {
 	public void testParkingACar() {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
-		// TODO: check that a ticket is actualy saved in DB
-		assertNotNull(ticketDAO.getTicket("ABCDEF"));
+		// TODO: check that a ticket is actually saved in DB and Parking table is
+		// updated with availability
+		Ticket ticketFromDB = ticketDAO.getTicket("ABCDEF");
 
-		// TODO: check that a Parking table is updated with availability
-		assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-
+		assertNotEquals(null, ticketFromDB);
+		assertEquals("ABCDEF", ticketFromDB.getVehicleRegNumber());
+		assertEquals(ParkingType.CAR, ticketFromDB.getParkingSpot().getParkingType());
+		assertNotNull(ticketFromDB.getInTime());
+		assertNull(ticketFromDB.getOutTime());
+		assertNotEquals(1, parkingSpotDAO.getNextAvailableSlot(ticketFromDB.getParkingSpot().getParkingType()));
 	}
 
 	@Test
@@ -70,12 +76,11 @@ public class ParkingDataBaseIT {
 		testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processExitingVehicle();
+		// TODO: check that the fare generated and out time are populated correctly in
+		// the database
 		Ticket ticket = ticketDAO.getTicket("ABCDEF");
-
-		// TODO: check that the fare generated in the database
-		assertEquals(0.0, ticket.getPrice());
-		// TODO: out time are populated correctly in the database
-		assertNotNull(ticket.getOutTime());
+		assertNotEquals(0, ticket.getPrice());
+		assertNotEquals(0, ticket.getOutTime());
 	}
 
 }

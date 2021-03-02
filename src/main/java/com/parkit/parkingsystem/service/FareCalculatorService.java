@@ -21,8 +21,10 @@ public class FareCalculatorService {
 		double outHour = ticket.getOutTime().getTime();
 
 		// TODO: Some tests are failing here. Need to check if this logic is correct
+		// Pour calculer la duree en fonction de la date d'entree et la date de sortie
 		double duration = outHour - inHour;
 
+		// Si la duree est inférieur à 30 min le parking est gratuit
 		if (duration <= HALF_HOUR_IN_MILLISECONDS) {
 			ticket.setPrice(0);
 			return;
