@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FareCalculatorService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">parking-system</a> &gt; <a href="index.source.html" class="el_package">com.parkit.parkingsystem.service</a> &gt; <span class="el_source">FareCalculatorService.java</span></div><h1>FareCalculatorService.java</h1><pre class="source lang-java linenums">package com.parkit.parkingsystem.service;
+
+import com.parkit.parkingsystem.constants.Fare;
+import com.parkit.parkingsystem.model.Ticket;
+
+<span class="fc" id="L6">public class FareCalculatorService {</span>
+
+    public String vehicleRegNumber;
+
+    private Ticket ticket;
+
+    public boolean calculateFare(Ticket ticket) {
+<span class="pc bpc" id="L13" title="1 of 4 branches missed.">        if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {</span>
+<span class="fc" id="L14">            throw new IllegalArgumentException(&quot;Out time provided is incorrect:&quot; + ticket.getOutTime().toString());</span>
+        }
+
+        float totalIntMin;
+        float totalOutMin;
+
+<span class="fc" id="L20">        int inDay = ticket.getInTime().getDay();</span>
+<span class="fc" id="L21">        int inHour = ticket.getInTime().getHours();</span>
+<span class="fc" id="L22">        int inMin = ticket.getInTime().getMinutes();</span>
+<span class="fc" id="L23">        int outDay = ticket.getOutTime().getDay();</span>
+<span class="fc" id="L24">        int outHour = ticket.getOutTime().getHours();</span>
+<span class="fc" id="L25">        int outMin = ticket.getOutTime().getMinutes();</span>
+
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        if (inDay &gt; outDay) {</span>
+<span class="nc" id="L28">            outDay = outDay + 7;</span>
+        }
+<span class="fc" id="L30">        totalIntMin = (inDay * 24 * 60) + (inHour * 60) + inMin;</span>
+<span class="fc" id="L31">        totalOutMin = (outDay * 24 * 60) + (outHour * 60) + outMin;</span>
+<span class="fc" id="L32">        float duration = totalOutMin - totalIntMin;</span>
+
+<span class="fc bfc" id="L34" title="All 2 branches covered.">        if (duration &lt;= 30) {</span>
+<span class="fc" id="L35">            ticket.setPrice(0);</span>
+<span class="fc" id="L36">            return false;</span>
+        } else {
+<span class="fc" id="L38">            double carRatePrice = ((duration / 60) * Fare.CAR_RATE_PER_HOUR * ticket.getDiscountRate());</span>
+<span class="fc" id="L39">            double bikeRatePrice = ((duration / 60) * Fare.BIKE_RATE_PER_HOUR * ticket.getDiscountRate());</span>
+
+<span class="pc bpc" id="L41" title="1 of 3 branches missed.">            switch (ticket.getParkingSpot().getParkingType()) {</span>
+                case CAR: {
+<span class="fc" id="L43">                    ticket.setPrice(carRatePrice);</span>
+<span class="fc" id="L44">                    return true;</span>
+                }
+                case BIKE: {
+<span class="fc" id="L47">                    ticket.setPrice(bikeRatePrice);</span>
+<span class="fc" id="L48">                    return true;</span>
+                }
+                default:
+<span class="nc" id="L51">                    throw new IllegalArgumentException(&quot;Unkown Parking Type&quot;);</span>
+            }
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

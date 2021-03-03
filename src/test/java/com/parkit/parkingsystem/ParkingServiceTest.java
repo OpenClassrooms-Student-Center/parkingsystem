@@ -7,6 +7,9 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +24,8 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
+    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+
     private static ParkingService parkingService;
 
     @Mock
@@ -29,6 +34,12 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+
+    @BeforeAll
+    private static void setUp() {
+        ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseTestConfig;
+    }
 
     @BeforeEach
     private void setUpPerTest() {
@@ -40,6 +51,7 @@ public class ParkingServiceTest {
             ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
+            ticket.setPrice(1.5);
             when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
             when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
 

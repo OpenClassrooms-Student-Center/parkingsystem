@@ -4,6 +4,8 @@ import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,17 +17,24 @@ import java.util.Date;
 
 public class FareCalculatorServiceTest {
 
+    private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
+
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
 
+    private static TicketDAO ticketDAO;
+
     @BeforeAll
     private static void setUp() {
+        ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseTestConfig;
         fareCalculatorService = new FareCalculatorService();
     }
 
     @BeforeEach
     private void setUpPerTest() {
         ticket = new Ticket();
+        ticket.setDiscountRate(1);
     }
 
     @Test
@@ -113,8 +122,8 @@ public class FareCalculatorServiceTest {
     @Test
     public void calculateFareCarWithMoreThanADayParkingTime(){
         Date inTime = new Date();
-        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
         Date outTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - (  24 * 60 * 60 * 1000) );//24 hours parking time should give 24 * parking fare per hour
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
@@ -122,6 +131,20 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+    }
+
+    @Test
+    public void freeFareForLessThan30MinutesParkingTime(){
+        Date inTime = new Date();
+        Date outTime = new Date();
+        inTime.setTime( System.currentTimeMillis() - ( 30 * 60 * 1000 ) );
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        assertEquals( 0 , ticket.getPrice());
     }
 
 }
