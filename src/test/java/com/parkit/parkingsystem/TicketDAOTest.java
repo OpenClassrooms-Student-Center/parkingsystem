@@ -1,7 +1,10 @@
 package com.parkit.parkingsystem;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +16,8 @@ import com.parkit.parkingsystem.model.Ticket;
 
 public class TicketDAOTest {
 
-	public static final String vehicleReg = "JOJO";
+	public static final String vehicleReg = "TOTO";
+	private static TicketDAO ticketDAO;
 
 	@Test
 	public void saveTicketTest() {
@@ -30,13 +34,13 @@ public class TicketDAOTest {
 
 		TicketDAO ticketDAO = new TicketDAO();
 		boolean result = ticketDAO.saveTicket(ticket);
-		// That doesn't seem to be a clean way of making it.
+
 		assertEquals(false, result);
 	}
 
 	@Test
 	public void getTicketTest() {
-		saveTicketTest();
+
 		TicketDAO ticketDAO = new TicketDAO();
 		Ticket ticketReturned = ticketDAO.getTicket(vehicleReg);
 		assertEquals(ticketReturned.getClass(), Ticket.class);
@@ -44,11 +48,21 @@ public class TicketDAOTest {
 
 	@Test
 	public void updateTicketTest() {
-		saveTicketTest();
+
 		TicketDAO ticketDAO = new TicketDAO();
 		Ticket ticketReturned = ticketDAO.getTicket(vehicleReg);
 		ticketReturned.setOutTime(new Date(System.currentTimeMillis()));
 		assertEquals(true, ticketDAO.updateTicket(ticketReturned));
+	}
+
+	@Test
+	public void isReccurentUser() throws SQLException, ClassNotFoundException, IOException {
+		TicketDAO ticketDAO = new TicketDAO();
+		Ticket ticket = new Ticket();
+		ticket.setVehicleRegNumber("ABCDEF");
+		boolean isTrue = ticketDAO.isReccurentUser(ticket.getVehicleRegNumber());
+		assertTrue(isTrue);
+
 	}
 
 }

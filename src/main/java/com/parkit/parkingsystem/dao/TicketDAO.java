@@ -87,4 +87,29 @@ public class TicketDAO {
 		}
 		return false;
 	}
+
+	// Query that checks if a user has already come when entering
+	public boolean isReccurentUser(String vehicleRegNumber) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = dataBaseConfig.getConnection();
+			ps = con.prepareStatement(DBConstants.VERIFY_IF_REGULAR_USER);
+			ps.setString(1, vehicleRegNumber);
+			rs = ps.executeQuery();
+
+			if (rs.next()) {
+				return rs.getBoolean(1);
+			}
+		} catch (Exception ex) {
+			logger.error("Error identification User", ex);
+		} finally {
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+			dataBaseConfig.closeConnection(con);
+
+		}
+		return true;
+	}
 }

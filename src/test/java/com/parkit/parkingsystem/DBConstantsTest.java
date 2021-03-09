@@ -8,6 +8,8 @@ import com.parkit.parkingsystem.constants.DBConstants;
 
 public class DBConstantsTest {
 
+	public static final String RECURRENT = null;
+
 	@Test
 	public void getNextParking_shouldRetrieveQueryToGetNextParking() {
 		assertEquals(DBConstants.GET_NEXT_PARKING_SPOT,
@@ -41,12 +43,5 @@ public class DBConstantsTest {
 		assertEquals(DBConstants.GET_VEHICLE_REG_NUMBER,
 				"select exists (select * from ticket t where t.VEHICLE_REG_NUMBER = ?");
 	}
-
-	/*
-	 * @Test public void
-	 * update_Ticket_In_Time_shouldRetrieveQueryToupdate_Ticket_In_Time() {
-	 * assertEquals(DBConstants.UPDATE_TICKET_IN_TIME,
-	 * "update ticket set IN_TIME=? where ID=?"); }
-	 */
 
 }
