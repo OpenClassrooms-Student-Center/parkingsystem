@@ -175,7 +175,7 @@ public class ParkingDataBaseIT {
 		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
 		ticket = new Ticket();
 		ticket.setParkingSpot(parkingSpot);
-		ticket.setVehicleRegNumber("ABCDEF2");
+		ticket.setVehicleRegNumber("ABCDEF");
 		ticket.setInTime(inTime);
 		ticket.setDiscount(1.43);
 		ticketDAO.saveTicket(ticket);

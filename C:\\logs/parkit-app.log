@@ -1,18 +1,2 @@
-2021-03-11 17:33:08.709 [main] INFO  DataBaseConfig - Create DB connection
-2021-03-11 17:33:09.202 [main] INFO  DataBaseConfig - Closing DB connection
-2021-03-11 17:33:09.203 [main] INFO  DataBaseConfig - Create DB connection
-2021-03-11 17:33:09.237 [main] INFO  DataBaseConfig - Closing Result Set
-2021-03-11 17:33:09.237 [main] INFO  DataBaseConfig - Closing Prepared Statement
-2021-03-11 17:33:09.237 [main] INFO  DataBaseConfig - Closing DB connection
-2021-03-11 17:33:09.238 [main] INFO  DataBaseConfig - Create DB connection
-2021-03-11 17:33:09.261 [main] INFO  DataBaseConfig - Closing DB connection
-2021-03-11 17:33:09.262 [main] INFO  DataBaseConfig - Create DB connection
-2021-03-11 17:33:09.284 [main] INFO  DataBaseConfig - Closing Result Set
-2021-03-11 17:33:09.285 [main] INFO  DataBaseConfig - Closing Prepared Statement
-2021-03-11 17:33:09.285 [main] INFO  DataBaseConfig - Closing DB connection
-2021-03-11 17:33:09.286 [main] INFO  DataBaseConfig - Create DB connection
-2021-03-11 17:33:09.306 [main] INFO  DataBaseConfig - Closing Result Set
-2021-03-11 17:33:09.306 [main] INFO  DataBaseConfig - Closing Prepared Statement
-2021-03-11 17:33:09.307 [main] INFO  DataBaseConfig - Closing DB connection
-2021-03-11 17:33:10.114 [main] ERROR ParkingSpotDAO - Error updating parking info
-java.sql.SQLException: null
+2021-03-11 20:57:02.872 [main] INFO  App - Initializing Parking System
+2021-03-11 20:57:02.875 [main] INFO  InteractiveShell - App initialized!!!
