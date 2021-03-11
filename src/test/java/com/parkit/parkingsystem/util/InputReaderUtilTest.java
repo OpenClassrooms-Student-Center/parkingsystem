@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.util;
 
 public class InputReaderUtilTest {
 

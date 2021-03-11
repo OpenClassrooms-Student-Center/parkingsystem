@@ -88,7 +88,7 @@ public class TicketDAO {
 		return false;
 	}
 
-	// Query that checks if a user has already come when entering
+	// verifie si un user est un reccurent user
 	public boolean isReccurentUser(String vehicleRegNumber) {
 		Connection con = null;
 		PreparedStatement ps = null;
@@ -111,5 +111,37 @@ public class TicketDAO {
 
 		}
 		return true;
+	}
+
+	public boolean getTicketUserPresentInDB(String vehicleRegNumber) throws Exception {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		boolean result = false;
+		int numberRow = 0;
+		try {
+			con = dataBaseConfig.getConnection();
+			ps = con.prepareStatement(DBConstants.GET_VEHICLE_REG_NUMBER);
+			ps.setString(1, vehicleRegNumber);
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				numberRow = rs.getInt("count(*)");
+			}
+
+			if (numberRow >= 1) {
+				result = true;
+			}
+
+		} catch (Exception ex) {
+			logger.error("Error when looking for an old ticket", ex);
+
+		} finally {
+			dataBaseConfig.closeResultSet(rs);
+			dataBaseConfig.closePreparedStatement(ps);
+			dataBaseConfig.closeConnection(con);
+		}
+		return result;
+
 	}
 }

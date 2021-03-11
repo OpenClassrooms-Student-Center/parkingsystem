@@ -10,6 +10,8 @@ public class FareCalculatorService {
 	// TimeUnit convertit en millisecondes to minutes
 	private static final double HOUR_IN_MILLISECONDS = TimeUnit.MINUTES.toMillis(60);
 	private static final double HALF_HOUR_IN_MILLISECONDS = TimeUnit.MINUTES.toMillis(30);
+	private double priceTicket;
+	private double priceTicketConvert;
 
 	public void calculateFare(Ticket ticket) {
 		if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
@@ -30,22 +32,27 @@ public class FareCalculatorService {
 			return;
 		}
 
+		if (ticket.isReccuringUser == true) {
+			priceTicket = ((duration * Fare.CAR_RATE_PER_HOUR) / HOUR_IN_MILLISECONDS * Fare.DISCOUNT);
+			priceTicketConvert = (double) Math.round(priceTicket * 100) / 100;
+			ticket.setDiscount(priceTicketConvert);
+		}
+
 		switch (ticket.getParkingSpot().getParkingType()) {
 		case CAR: {
-
-			ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR / HOUR_IN_MILLISECONDS);
+			priceTicket = (duration * Fare.CAR_RATE_PER_HOUR / HOUR_IN_MILLISECONDS);
+			priceTicketConvert = (double) Math.round(priceTicket * 100) / 100;
+			ticket.setPrice(priceTicketConvert);
 			break;
 		}
 		case BIKE: {
-			ticket.setPrice((duration * Fare.BIKE_RATE_PER_HOUR) / HOUR_IN_MILLISECONDS);
+			priceTicket = (duration * Fare.BIKE_RATE_PER_HOUR / HOUR_IN_MILLISECONDS);
+			priceTicketConvert = (double) Math.round(priceTicket * 100) / 100;
+			ticket.setPrice(priceTicketConvert);
 			break;
 		}
 		default:
-			throw new IllegalArgumentException("Unkown Parking Type");
-		}
-
-		if (ticket.isReccuringUser == true) {
-			ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) / HOUR_IN_MILLISECONDS * Fare.DISCOUNT);
+			throw new NullPointerException("Unkown Parking Type");
 		}
 
 	}

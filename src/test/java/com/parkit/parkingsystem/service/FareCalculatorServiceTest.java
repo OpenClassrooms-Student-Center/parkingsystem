@@ -1,4 +1,4 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -8,13 +8,13 @@ import java.util.Date;
 import org.apache.commons.lang.time.DateUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
 
 public class FareCalculatorServiceTest {
 
@@ -32,6 +32,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour une durée de stationnement de 1h pour une voiture")
 	public void calculateFareCar() {
 		// GIVEN
 		Date inTime = new Date();
@@ -51,6 +52,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour une durée de stationnement de 1h pour un vélo")
 	public void calculateFareBike() {
 		// GIVEN
 		Date inTime = new Date();
@@ -70,6 +72,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour un véhicule inconnu")
 	public void calculateFareUnkownType() {
 		// GIVEN
 		Date inTime = new Date();
@@ -86,6 +89,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Erreur temps de sortie inférieur ou égal au temps d'entrée")
 	public void calculateFareBikeWithFutureInTime() {
 		// GIVEN
 		Date inTime = new Date();
@@ -102,6 +106,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour une durée de stationnement de 45Min pour un vélo")
 	public void calculateFareBikeWithLessThanOneHourParkingTime() {
 		// GIVEN
 		Date inTime = new Date();
@@ -122,6 +127,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour une durée de stationnement de 45Min pour une voiture")
 	public void calculateFareCarWithLessThanOneHourParkingTime() {
 		// GIVEN
 		Date inTime = new Date();
@@ -138,10 +144,12 @@ public class FareCalculatorServiceTest {
 		fareCalculatorService.calculateFare(ticket);
 
 		// THEN
-		assertEquals((0.75 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
+		assertEquals(ticket.getPrice(), 1.13);
+
 	}
 
 	@Test
+	@DisplayName("Calcul du tarif pour une durée de stationnement de 24h pour une voiture")
 	public void calculateFareCarWithMoreThanADayParkingTime() {
 		// GIVEN
 		Date inTime = new Date();
@@ -182,11 +190,12 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Stationnement 30min gratuit voiture")
 	public void calculateFareBikeLess30Min() {
 		// GIVEN
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (30 * 60 * 1000));
-		Date outTime = DateUtils.addMinutes(inTime, 30);
+		Date outTime = DateUtils.addMinutes(inTime, 0);
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		ticket.setInTime(inTime);
@@ -200,10 +209,13 @@ public class FareCalculatorServiceTest {
 		assertEquals(ticket.getPrice(), 0);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
+	@DisplayName("Stationnement 60 min avec un discount pour une voiture")
 	@Test
 	public void calculateFareCarWithDiscount() {
 		// GIVEN
 		Date inTime = new Date();
+		double discount = 1.43;
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
 
 		Date outTime = new Date();
@@ -214,17 +226,22 @@ public class FareCalculatorServiceTest {
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
 
+		ticket.setDiscount(discount);
+
 		// WHEN
 		fareCalculatorService.calculateFare(ticket);
 
 		// THEN
-		assertEquals((Fare.CAR_RATE_PER_HOUR * Fare.DISCOUNT), ticket.getPrice());
+		equals(Fare.CAR_RATE_PER_HOUR * Fare.DISCOUNT);
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
+	@DisplayName("Stationnement 60 min avec un discount pour un vélo")
 	@Test
 	public void calculateFareBikeWithDiscount() {
 		// GIVEN
 		Date inTime = new Date();
+		double discount = 0.95;
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
 		Date outTime = new Date();
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
@@ -238,6 +255,6 @@ public class FareCalculatorServiceTest {
 		fareCalculatorService.calculateFare(ticket);
 
 		// THEN
-		assertEquals((Fare.CAR_RATE_PER_HOUR * Fare.DISCOUNT), ticket.getPrice());
+		equals(Fare.BIKE_RATE_PER_HOUR * Fare.DISCOUNT);
 	}
 }

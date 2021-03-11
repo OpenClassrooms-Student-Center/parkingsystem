@@ -1,17 +1,17 @@
 package com.parkit.parkingsystem.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -34,16 +34,15 @@ public class ParkingDataBaseIT {
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
-	private ParkingService parkingService;
 	private ParkingType parkingType;
 	private static Ticket ticket;
 	private ParkingSpot parkingSpot;
-
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
 
 	@BeforeAll
 	private static void setUp() throws Exception {
+
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
@@ -51,65 +50,54 @@ public class ParkingDataBaseIT {
 		dataBasePrepareService = new DataBasePrepareService();
 	}
 
-	@BeforeEach
-	private void setUpPerTest() throws Exception {
-		when(inputReaderUtil.readSelection()).thenReturn(1);
-		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-		dataBasePrepareService.clearDataBaseEntries();
-		parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
-	}
-
 	@AfterAll
 	private static void tearDown() {
-
+		dataBasePrepareService.clearDataBaseEntries();
 	}
 
 	@Test
+	@DisplayName("Entrée d'une voiture")
 	public void testParkingACar() throws Exception {
+		// GIVEN
 		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.CAR;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
 
-		parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		// WHEN
 		parkingService.processIncomingVehicle();
+
+		// THEN
+		assertThat(parkingSpotDAO.getNextAvailableSlot(parkingType)).isNotEqualTo(1);
+		assertThat(ticketDAO.getTicket("ABCDEF").getParkingSpot().getId()).isEqualTo(1);
+
 		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
 		// with availability
-
-		int parkingSuivant = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-		boolean parkingSpotForAbcdef = parkingSpotDAO.updateParking(ticketDAO.getTicket("ABCDEF").getParkingSpot());
-		int ticketID = ticketDAO.getTicket("ABCDEF").getId();
-
-		assertEquals(2, parkingSuivant);
-		assertTrue(parkingSpotForAbcdef);
-		assertNotNull(ticketID);
 	}
 
 	@Test
-	public void testParkingLotExit() throws Exception {
+	@DisplayName("Entrée d'un velo")
+	public void testParkingABike() throws Exception {
+		// GIVEN
+		when(inputReaderUtil.readSelection()).thenReturn(2);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("BDERF");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.BIKE;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
 
-		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
+		// WHEN
+		parkingService.processIncomingVehicle();
 
-		Ticket ticket = new Ticket();
-		ParkingSpot parkingSpot = new ParkingSpot(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR), ParkingType.CAR,
-				false);
-		ticket.setParkingSpot(parkingSpot);
-		ticket.setVehicleRegNumber("ABCDEF");
-		Date inTime = new Date();
-		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
-		ticket.setInTime(inTime);
-		ticket.setPrice(0.0);
-		ticketDAO.saveTicket(ticket);
+		// THEN
+		assertThat(parkingSpotDAO.getNextAvailableSlot(parkingType)).isNotEqualTo(4);
 
-		parkingService.processExitingVehicle();
-
-		assertEquals(1.5, (ticketDAO.getTicket("ABCDEF").getPrice()));
-		assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime());
-		assertEquals(1.43, (ticketDAO.getTicket("ABCDEF").getDiscount()));
+		assertThat(ticketDAO.getTicket("BDERF").getParkingSpot().getId()).isEqualTo(4);
 	}
 
 	@Test
-
-	public void testParkingCarLotExitReduction() throws Exception {
+	@DisplayName("Sortie d'une voiture, enregistrement des infos en BDD")
+	public void testParkingCarLotExit() throws SQLException, Exception {
 		// GIVEN
 		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
@@ -121,6 +109,75 @@ public class ParkingDataBaseIT {
 		ticket.setParkingSpot(parkingSpot);
 		ticket.setVehicleRegNumber("ABCDEF");
 		ticket.setInTime(inTime);
+		ticket.setPrice(1.0);
+		ticketDAO.saveTicket(ticket);
+
+		// WHEN
+		parkingService.processExitingVehicle();
+		ticket = ticketDAO.getTicket("ABCDEF");
+
+		// THEN
+		assertThat(ticket.getPrice()).isEqualTo(1.5);
+		assertThat(ticket.getParkingSpot().getId()).isEqualTo(1);
+		assertNotNull(ticket.getOutTime());
+		// TODO: check that the fare generated and out time are populated correctly in
+		// the database
+	}
+
+	@Test
+	@DisplayName("Sortie d'un vélo, enregistrement des infos en BDD")
+	public void testParkingBikeLotExit() throws Exception {
+
+		// GIVEN
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("BCDEFG2");
+		parkingSpot = new ParkingSpot(5, ParkingType.BIKE, false);
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		Timestamp inTime = new Timestamp(System.currentTimeMillis() - 3600000);
+		ticket = new Ticket();
+		ticket.setParkingSpot(parkingSpot);
+		ticket.setInTime(inTime);
+		ticket.setVehicleRegNumber("BCDEFG2");
+		ticket.setPrice(1.00);
+		ticketDAO.saveTicket(ticket);
+
+		// WHEN
+		parkingService.processExitingVehicle();
+		ticket = ticketDAO.getTicket("BCDEFG2");
+
+		// THEN
+		assertThat(ticket.getPrice()).isEqualTo(1.0);
+		assertThat(ticket.getParkingSpot().getId()).isEqualTo(5);
+		assertNotNull(ticket.getOutTime());
+	}
+
+	@Test
+	@DisplayName("Erreur, véhicule inconnue dans la BDD")
+	public void testUnknownVehicle() throws Exception {
+		// GIVEN
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+		// WHEN
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
+		// THEN
+		assertThrows(Exception.class, () -> parkingService.processExitingVehicle());
+	}
+
+	@Test
+	@DisplayName("Sortie d'une voiture avec le discount")
+	public void testParkingCarLotExitReduction() throws Exception {
+		// GIVEN
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.CAR;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
+		Timestamp inTime = new Timestamp(System.currentTimeMillis() - 3600000);
+		parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+		ticket = new Ticket();
+		ticket.setParkingSpot(parkingSpot);
+		ticket.setVehicleRegNumber("ABCDEF2");
+		ticket.setInTime(inTime);
+		ticket.setDiscount(1.43);
 		ticketDAO.saveTicket(ticket);
 
 		// WHEN
@@ -130,6 +187,63 @@ public class ParkingDataBaseIT {
 		// THEN
 		assertThat(ticket.getPrice()).isEqualTo(1.43);
 		assertNotNull(ticket.getOutTime());
+	}
+
+	@Test
+	@DisplayName("Sortie d'un vélo avec le discount")
+	public void testParkingBikeLotExitReduction() throws Exception {
+
+		// GIVEN
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("BCDEFG");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.BIKE;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
+		Timestamp inTime = new Timestamp(System.currentTimeMillis() - 3600000);
+		parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+		ticket = new Ticket();
+		ticket.setParkingSpot(parkingSpot);
+		ticket.setVehicleRegNumber("BCDEFG");
+		ticket.setInTime(inTime);
+		ticket.setDiscount(0.95);
+		ticketDAO.saveTicket(ticket);
+
+		// WHEN
+		parkingService.processExitingVehicle();
+		ticket = ticketDAO.getTicket("BCDEFG");
+
+		// THEN
+		assertThat(ticket.getPrice()).isEqualTo(0.95);
+		assertNotNull(ticket.getOutTime());
+
+	}
+
+	@Test
+	@DisplayName("Entrée d'un utilisateur récurrent, discount activé")
+	public void testRecurrentUserReductionMessage() throws Exception {
+		// GIVEN
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.CAR;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
+
+		// WHEN
+		parkingService.processIncomingVehicle();
+
+		// THEN
+		boolean result = ticketDAO.getTicketUserPresentInDB("ABCDEF");
+		assertFalse(result);
+	}
+
+	@Test
+	@DisplayName("Nouveau utilisateur, pas de discount")
+	public void testNewUserNotReduction() throws Exception {
+		// GIVEN
+		boolean result = ticketDAO.getTicketUserPresentInDB("BBADEFT");
+		// WHEN
+
+		// THEN
+		assertFalse(result);
 	}
 
 }
