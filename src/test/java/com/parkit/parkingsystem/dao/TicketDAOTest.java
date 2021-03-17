@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.parkit.parkingsystem.constants.ParkingType;
@@ -16,8 +17,8 @@ import com.parkit.parkingsystem.model.Ticket;
 public class TicketDAOTest {
 
 	public static final String vehicleReg = "TOTO";
-	private static TicketDAO ticketDAO;
 
+	@DisplayName("Test pour sauvegarder un ticket en BDD")
 	@Test
 	public void saveTicketTest() {
 
@@ -39,6 +40,7 @@ public class TicketDAOTest {
 		assertEquals(false, result);
 	}
 
+	@DisplayName("Test pour recuperer un ticket dans une BDD")
 	@Test
 	public void getTicketTest() {
 
@@ -52,6 +54,7 @@ public class TicketDAOTest {
 		assertEquals(ticketReturned.getClass(), Ticket.class);
 	}
 
+	@DisplayName("Test pour mettre à jour un ticket en BDD")
 	@Test
 	public void updateTicketTest() {
 
@@ -66,6 +69,7 @@ public class TicketDAOTest {
 		assertEquals(true, ticketDAO.updateTicket(ticketReturned));
 	}
 
+	@DisplayName("Test pour vérifier un user reccurent en BDD")
 	@Test
 	public void isReccurentUser() throws SQLException, ClassNotFoundException, IOException {
 

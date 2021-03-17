@@ -4,11 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.parkit.parkingsystem.constants.DBConstants;
-
 public class DBConstantsTest {
-
-	public static final String RECURRENT = null;
 
 	@Test
 	public void getNextParking_shouldRetrieveQueryToGetNextParking() {

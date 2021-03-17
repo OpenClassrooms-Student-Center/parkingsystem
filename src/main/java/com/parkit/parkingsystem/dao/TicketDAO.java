@@ -101,7 +101,11 @@ public class TicketDAO {
 
 			if (rs.next()) {
 				return rs.getBoolean(1);
+
 			}
+			System.out.println(
+					"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+
 		} catch (Exception ex) {
 			logger.error("Error identification User", ex);
 		} finally {
@@ -113,35 +117,4 @@ public class TicketDAO {
 		return true;
 	}
 
-	public boolean getTicketUserPresentInDB(String vehicleRegNumber) throws Exception {
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		boolean result = false;
-		int numberRow = 0;
-		try {
-			con = dataBaseConfig.getConnection();
-			ps = con.prepareStatement(DBConstants.GET_VEHICLE_REG_NUMBER);
-			ps.setString(1, vehicleRegNumber);
-			rs = ps.executeQuery();
-
-			while (rs.next()) {
-				numberRow = rs.getInt("count(*)");
-			}
-
-			if (numberRow >= 1) {
-				result = true;
-			}
-
-		} catch (Exception ex) {
-			logger.error("Error when looking for an old ticket", ex);
-
-		} finally {
-			dataBaseConfig.closeResultSet(rs);
-			dataBaseConfig.closePreparedStatement(ps);
-			dataBaseConfig.closeConnection(con);
-		}
-		return result;
-
-	}
 }

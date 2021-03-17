@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
-import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 
 public class ParkingSpotDAO {
@@ -17,7 +16,7 @@ public class ParkingSpotDAO {
 
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-	public int getNextAvailableSlot(ParkingType parkingType) {
+	public int getNextAvailableSlot(Object parkingType) {
 		Connection con = null;
 		int result = -1;
 		try {

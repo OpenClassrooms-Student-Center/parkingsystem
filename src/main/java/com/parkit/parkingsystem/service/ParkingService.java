@@ -106,13 +106,6 @@ public class ParkingService {
 			Date outTime = new Date();
 			ticket.setOutTime(outTime);
 			fareCalculatorService.calculateFare(ticket);
-			if (ticketDAO.getTicketUserPresentInDB(vehicleRegNumber) && ticket.getPrice() > 0.0) {
-				double reduction = ticket.getPrice() * 5 / 100;
-				double applyReduction = ticket.getPrice() - reduction;
-				double convertPrice = (double) Math.round(applyReduction * 100) / 100;
-				ticket.setPrice(convertPrice);
-				System.out.println("You have a 5% discount applied immediately for your recurring use of our parking");
-			}
 			if (ticketDAO.updateTicket(ticket)) {
 				ParkingSpot parkingSpot = ticket.getParkingSpot();
 				parkingSpot.setAvailable(true);

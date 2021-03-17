@@ -71,11 +71,13 @@ public class Ticket {
 	}
 
 	public double getDiscount() {
-		return price * discount;
+		return discount;
 	}
 
 	public void setDiscount(double discount) {
 		this.discount = discount;
 	}
+
+
 
 }

@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -46,6 +47,7 @@ class ParkingSpotDAOTest {
 		when(con.prepareStatement(anyString())).thenReturn(preparedStatement);
 	}
 
+	@DisplayName("Test pour vérifier si une place de parking est libre en BDD")
 	@Test
 	void nextParkingSpot_shouldIsFound() throws SQLException {
 		// quand le preparedStatement GET_NEXT_PARKING_SPOT est appelé
@@ -60,6 +62,7 @@ class ParkingSpotDAOTest {
 		assertEquals(0, result); // la méthode renvoie -1 si la connection echoue donc 0 si elle fonctionne
 	}
 
+	@DisplayName("Test pour vérifier si une place de parking est libre en BDD pour une voiture")
 	@Test
 	void nextParkingSpot_shouldIsFoundforAcar() throws SQLException {
 
@@ -73,6 +76,7 @@ class ParkingSpotDAOTest {
 		assertEquals(2, result);
 	}
 
+	@DisplayName("Test pour mettre à jour la disponibilite du parking en BDD pour une voiture")
 	@Test
 	void updateParkingSpot_shouldForAcar() throws SQLException {
 
@@ -87,6 +91,7 @@ class ParkingSpotDAOTest {
 		assertTrue(result);
 	}
 
+	@DisplayName("Test pour mettre à jour la disponibilite du parking en BDD pour un vélo")
 	@Test
 	void updateParkingSpot_shouldForAbike() throws SQLException {
 		// une moto est garée à l'emplacement 4
@@ -103,6 +108,7 @@ class ParkingSpotDAOTest {
 		assertTrue(result);
 	}
 
+	@DisplayName("Test pour une place de parking non trouvée")
 	@Test
 	void nextParkingSpot_shouldIsNotFoundforAcar() throws SQLException {
 
@@ -115,11 +121,12 @@ class ParkingSpotDAOTest {
 		assertEquals(-1, result);
 	}
 
+	@DisplayName("Test pour une erreur lors de la mise à jour d'une place de parking")
 	@Test
 	void update_shouldFail() throws SQLException {
 
 		// GIVEN
-		parkingSpot = new ParkingSpot(4, ParkingType.BIKE, false);
+		parkingSpot = new ParkingSpot(4, ParkingType.CAR, false);
 
 		// WHEN
 		when(preparedStatement.executeUpdate()).thenThrow(SQLException.class);
