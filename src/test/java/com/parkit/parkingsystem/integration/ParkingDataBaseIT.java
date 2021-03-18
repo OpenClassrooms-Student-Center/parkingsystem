@@ -73,12 +73,11 @@ public class ParkingDataBaseIT {
 		Mockito.verify(ticketDAO).saveTicket(Mockito.any(Ticket.class));
 		Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class));
 
-		// TODO: check that a ticket is actually saved in DB and Parking table is
-		// updated with availability
 	}
 
 	@Test
 	public void testParkingLotExit() {
+
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 
@@ -99,8 +98,7 @@ public class ParkingDataBaseIT {
 
 		Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class));
 		Assertions.assertEquals(1.5, ticket.getPrice());
-		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
+
 	}
 
 }

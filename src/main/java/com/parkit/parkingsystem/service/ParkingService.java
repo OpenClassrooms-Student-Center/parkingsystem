@@ -45,16 +45,8 @@ public class ParkingService {
 				ticket.setPrice(0);
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
-				Ticket customer = ticketDAO.getTicket(ticket.getVehicleRegNumber()); // create Ticket customer with
-																						// reference Database
-				ticket.setDiscount(customer != null); // if customer is know => discount price
-
 				ticketDAO.saveTicket(ticket);
 				System.out.println("Generated Ticket and saved in DB");
-
-				if (customer != null) // if customer is know => welcome message
-					System.out.println("Welcome back! As a customer, you benefit from a 5% discount");
-
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
 			}

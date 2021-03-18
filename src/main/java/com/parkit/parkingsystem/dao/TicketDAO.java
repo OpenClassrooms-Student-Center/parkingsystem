@@ -32,7 +32,6 @@ public class TicketDAO {
 			ps.setDouble(3, ticket.getPrice());
 			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
 			ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : (new Timestamp(ticket.getOutTime().getTime())));
-			ps.setBoolean(6, ticket.isDiscount()); // add discount line
 			return ps.execute();
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
@@ -60,7 +59,6 @@ public class TicketDAO {
 				ticket.setPrice(rs.getDouble(3));
 				ticket.setInTime(rs.getTimestamp(4));
 				ticket.setOutTime(rs.getTimestamp(5));
-				ticket.setDiscount(rs.getBoolean(6)); // add discount line
 			}
 			dataBaseConfig.closeResultSet(rs);
 			dataBaseConfig.closePreparedStatement(ps);
@@ -80,7 +78,6 @@ public class TicketDAO {
 			ps.setDouble(1, ticket.getPrice());
 			ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
 			ps.setInt(3, ticket.getId());
-			ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime())); // Add line for update ticket
 			ps.execute();
 			return true;
 		} catch (Exception ex) {
@@ -90,4 +87,23 @@ public class TicketDAO {
 		}
 		return false;
 	}
+
+	public boolean isReccurent(Ticket ticket) {
+		Connection con = null;
+		try {
+			con = dataBaseConfig.getConnection();
+			PreparedStatement ps = con.prepareStatement(DBConstants.IS_RECURRENT);
+			ps.setString(1, ticket.getVehicleRegNumber());
+			ResultSet res = ps.executeQuery();
+			res.next();
+			int count = res.getInt(1);
+			return (count > 1) ? true : false;
+		} catch (Exception ex) {
+			logger.error("Error fetching next available slot", ex);
+		} finally {
+			dataBaseConfig.closeConnection(con);
+			return false;
+		}
+	}
+
 }

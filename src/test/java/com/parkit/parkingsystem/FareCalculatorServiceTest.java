@@ -8,17 +8,26 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
 	private static FareCalculatorService fareCalculatorService;
 	private Ticket ticket;
+
+	@Mock
+	private static TicketDAO ticketDAO;
 
 	@BeforeAll
 	private static void setUp() {
@@ -166,6 +175,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareCarWithDiscountForCustomer() {
+		fareCalculatorService = new FareCalculatorService(ticketDAO);
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // 60 minutes Discount customer
 		Date outTime = new Date();
@@ -173,7 +183,7 @@ public class FareCalculatorServiceTest {
 		ticket.setInTime(inTime);
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		ticket.setDiscount(true);
+		Mockito.when(ticketDAO.isReccurent(ticket)).thenReturn(true);
 
 		fareCalculatorService.calculateFare(ticket);
 
@@ -182,6 +192,7 @@ public class FareCalculatorServiceTest {
 
 	@Test
 	public void calculateFareBikeWithDiscountForCustomer() {
+		fareCalculatorService = new FareCalculatorService(ticketDAO);
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000)); // 60 minutes Discount customer
 		Date outTime = new Date();
@@ -189,7 +200,7 @@ public class FareCalculatorServiceTest {
 		ticket.setInTime(inTime);
 		ticket.setOutTime(outTime);
 		ticket.setParkingSpot(parkingSpot);
-		ticket.setDiscount(true);
+		Mockito.when(ticketDAO.isReccurent(ticket)).thenReturn(true);
 
 		fareCalculatorService.calculateFare(ticket);
 
