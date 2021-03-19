@@ -110,10 +110,14 @@ public class Ticket {
 	/**
 	 * getter of the ticket inTime
 	 *
-	 * @return incomming time
+	 * @return incoming time
 	 */
 	public Date getInTime() {
-		return inTime;
+		if (inTime == null) {
+			return null;
+		} else {
+			return new Date(inTime.getTime());
+		}
 	}
 
 	/**
@@ -122,7 +126,11 @@ public class Ticket {
 	 * @param inTime it's time to be set on the ticket
 	 */
 	public void setInTime(Date inTime) {
-		this.inTime = inTime;
+		if (inTime == null) {
+			this.inTime = null;
+		} else {
+			this.inTime = new Date(inTime.getTime());
+		}
 	}
 
 	/**
@@ -131,7 +139,11 @@ public class Ticket {
 	 * @return time to user exit parking
 	 */
 	public Date getOutTime() {
-		return outTime;
+		if (outTime == null) {
+			return null;
+		} else {
+			return new Date(outTime.getTime());
+		}
 	}
 
 	/**
@@ -140,7 +152,12 @@ public class Ticket {
 	 * @param outTime it's time to be set on the ticket
 	 */
 	public void setOutTime(Date outTime) {
-		this.outTime = outTime;
+		if (outTime == null) {
+			this.outTime = null;
+		} else {
+			this.outTime = new Date(outTime.getTime());
+		}
+
 	}
 
 }
