@@ -14,19 +14,36 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
+/**
+ * * @author Nicolas BIANCUCCI this class contains methods that allow
+ * interaction
+ *
+ */
 public class TicketDAO {
 
+	/**
+	 * TicketDAO Logger
+	 */
 	private static final Logger logger = LogManager.getLogger("TicketDAO");
 
+	/**
+	 * Instantiating DatabaseConfig
+	 */
 	public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
+	/**
+	 * save tickets to database
+	 *
+	 * @param ticket Ticket to be saved
+	 * @return true if ticket was saved successfully false if the savinf process
+	 *         failed
+	 */
 	public boolean saveTicket(Ticket ticket) {
 		Connection con = null;
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
-			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME, DISCOUNT)
-			// ps.setInt(1,ticket.getId());
+			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setInt(1, ticket.getParkingSpot().getId());
 			ps.setString(2, ticket.getVehicleRegNumber());
 			ps.setDouble(3, ticket.getPrice());
@@ -37,17 +54,23 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
 			dataBaseConfig.closeConnection(con);
-			return false;
 		}
+		return false;
 	}
 
+	/**
+	 * used to retrieve a ticket from database
+	 *
+	 * @param vehicleRegNumber User vehicle registration number to Database
+	 * @return the latest ticket found in database
+	 */
 	public Ticket getTicket(String vehicleRegNumber) {
 		Connection con = null;
 		Ticket ticket = null;
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
-			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME, DISCOUNT)
+			// ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
 			ps.setString(1, vehicleRegNumber);
 			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
@@ -60,16 +83,22 @@ public class TicketDAO {
 				ticket.setInTime(rs.getTimestamp(4));
 				ticket.setOutTime(rs.getTimestamp(5));
 			}
-			dataBaseConfig.closeResultSet(rs);
-			dataBaseConfig.closePreparedStatement(ps);
+
 		} catch (Exception ex) {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
 			dataBaseConfig.closeConnection(con);
-			return ticket;
 		}
+		return ticket;
 	}
 
+	/**
+	 * used to update given ticket with price and outTime
+	 *
+	 * @param ticket Ticket should be updated
+	 * @return true if the ticket was updated successfully false if the updating
+	 *         process failed
+	 */
 	public boolean updateTicket(Ticket ticket) {
 		Connection con = null;
 		try {
@@ -88,6 +117,13 @@ public class TicketDAO {
 		return false;
 	}
 
+	/**
+	 * used to counting Recurrent ticket with Registration number vehicle
+	 *
+	 * @param ticket Ticket count reccurent vehicle
+	 * @return true if registration number vehicle is found false if the
+	 *         registration number vehicle is unknown
+	 */
 	public boolean isReccurent(Ticket ticket) {
 		Connection con = null;
 		try {
@@ -102,8 +138,9 @@ public class TicketDAO {
 			logger.error("Error fetching next available slot", ex);
 		} finally {
 			dataBaseConfig.closeConnection(con);
-			return false;
 		}
+		return false;
+
 	}
 
 }

@@ -22,6 +22,12 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
+/**
+ * this class contains unit test of ParkingSerice.java class
+ *
+ * @author Nicolas BIANCUCCI
+ *
+ */
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
@@ -59,6 +65,7 @@ public class ParkingServiceTest {
 	@Test
 	public void processExitingVehicleTest() {
 		parkingService.processExitingVehicle();
+
 		verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
 	}
 

@@ -12,22 +12,52 @@ import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
+/**
+ * this class processes both vehicle come in and come out to parking
+ *
+ * @author NICO
+ *
+ */
 public class ParkingService {
+	/**
+	 * Parking service logger
+	 */
 
 	private static final Logger logger = LogManager.getLogger("ParkingService");
 
+	/**
+	 * instantiation fareCaclculatorService
+	 */
 	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
-
+	/**
+	 * InputReaderUtil object
+	 */
 	private InputReaderUtil inputReaderUtil;
+	/**
+	 * ParkingSpotDAO object
+	 */
 	private ParkingSpotDAO parkingSpotDAO;
+	/**
+	 * TicketDAO object
+	 */
 	private TicketDAO ticketDAO;
 
+	/**
+	 * class constructor
+	 *
+	 * @param inputReaderUtil
+	 * @param parkingSpotDAO
+	 * @param ticketDAO
+	 */
 	public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO) {
 		this.inputReaderUtil = inputReaderUtil;
 		this.parkingSpotDAO = parkingSpotDAO;
 		this.ticketDAO = ticketDAO;
 	}
 
+	/**
+	 * method to process incoming vehicle
+	 */
 	public void processIncomingVehicle() {
 		try {
 			ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
@@ -55,11 +85,24 @@ public class ParkingService {
 		}
 	}
 
+	/**
+	 * method to call readVehiculeRegistrationNumber to inputReaderUtil class
+	 *
+	 * @return String: registration vehicle number
+	 * @throws IllegalArgumentException
+	 */
 	private String getVehicleRegNumber() throws Exception {
 		System.out.println("Please type the vehicle registration number and press enter key");
 		return inputReaderUtil.readVehicleRegistrationNumber();
 	}
 
+	/**
+	 * method to checks if there parking spot is available
+	 *
+	 * @return the available parking spot
+	 * @throws Exception if there is no available parking spot or user's input is
+	 *                   incorrect
+	 */
 	public ParkingSpot getNextParkingNumberIfAvailable() {
 		int parkingNumber = 0;
 		ParkingSpot parkingSpot = null;
@@ -79,6 +122,12 @@ public class ParkingService {
 		return parkingSpot;
 	}
 
+	/**
+	 * get incoming vehicle type
+	 *
+	 * @return the select type parking
+	 * @throws IllegaleArgumentException if the type is incorrect
+	 */
 	private ParkingType getVehicleType() {
 		System.out.println("Please select vehicle type from menu");
 		System.out.println("1 CAR");
@@ -98,6 +147,9 @@ public class ParkingService {
 		}
 	}
 
+	/**
+	 * method to process exiting vehicle
+	 */
 	public void processExitingVehicle() {
 		try {
 			String vehicleRegNumber = getVehicleRegNumber();
