@@ -1,61 +1,146 @@
 package com.parkit.parkingsystem.model;
 
-import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * this class permits the storage and retrieving values to ticket table from
+ * database
+ *
+ * @author Nicolas BIANCUCCI
+ *
+ */
 public class Ticket {
-    private int id;
-    private ParkingSpot parkingSpot;
-    private String vehicleRegNumber;
-    private double price;
-    private Date inTime;
-    private Date outTime;
+	/**
+	 * represents unique id of ticket
+	 */
+	private int id;
+	/**
+	 * number of parkingspot in wich the vehicule will park
+	 */
+	private ParkingSpot parkingSpot;
+	/**
+	 * represents registration number vehicule
+	 */
+	private String vehicleRegNumber;
+	/**
+	 * price will paid by user customer to exit parking
+	 */
+	private double price;
+	/**
+	 * It's the time to enters to the parking
+	 */
+	private Date inTime;
+	/**
+	 * It's the time to exit to the parking
+	 */
+	private Date outTime;
 
-    public int getId() {
-        return id;
-    }
+	/**
+	 * getter of ticket id
+	 *
+	 * @return int ticket indentifier
+	 */
+	public int getId() {
+		return id;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	/**
+	 * setter of ticket id
+	 *
+	 * @param id to ticket
+	 */
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public ParkingSpot getParkingSpot() {
-        return parkingSpot;
-    }
+	/**
+	 * getter of the ticket parkingspot
+	 *
+	 * @return parking spot instance
+	 */
+	public ParkingSpot getParkingSpot() {
+		return parkingSpot;
+	}
 
-    public void setParkingSpot(ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
-    }
+	/**
+	 * setter of the ticket parking spot
+	 *
+	 * @param parkingSpot instance
+	 */
+	public void setParkingSpot(ParkingSpot parkingSpot) {
+		this.parkingSpot = parkingSpot;
+	}
 
-    public String getVehicleRegNumber() {
-        return vehicleRegNumber;
-    }
+	/**
+	 * getter of the ticket vehiculeRegNumber
+	 *
+	 * @return vehicule registration number associated with ticket
+	 */
+	public String getVehicleRegNumber() {
+		return vehicleRegNumber;
+	}
 
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
-    }
+	/**
+	 * setter of the ticket vehiculeRegNumber
+	 *
+	 * @param vehicleRegNumber instance
+	 */
+	public void setVehicleRegNumber(String vehicleRegNumber) {
+		this.vehicleRegNumber = vehicleRegNumber;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	/**
+	 * getter of ticket price
+	 *
+	 * @return the price to user paid to exit parking
+	 */
+	public double getPrice() {
+		return price;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	/**
+	 * setter of ticket price
+	 *
+	 * @param price to be set on the ticket
+	 */
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
-    public Date getInTime() {
-        return inTime;
-    }
+	/**
+	 * getter of the ticket inTime
+	 *
+	 * @return incomming time
+	 */
+	public Date getInTime() {
+		return inTime;
+	}
 
-    public void setInTime(Date inTime) {
-        this.inTime = inTime;
-    }
+	/**
+	 * setter of ticket inTime
+	 *
+	 * @param inTime it's time to be set on the ticket
+	 */
+	public void setInTime(Date inTime) {
+		this.inTime = inTime;
+	}
 
-    public Date getOutTime() {
-        return outTime;
-    }
+	/**
+	 * getter of the ticket outTime
+	 *
+	 * @return time to user exit parking
+	 */
+	public Date getOutTime() {
+		return outTime;
+	}
 
-    public void setOutTime(Date outTime) {
-        this.outTime = outTime;
-    }
+	/**
+	 * setter of the ticket outTime
+	 *
+	 * @param outTime it's time to be set on the ticket
+	 */
+	public void setOutTime(Date outTime) {
+		this.outTime = outTime;
+	}
+
 }
