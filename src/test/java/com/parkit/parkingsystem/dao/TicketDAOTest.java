@@ -1,10 +1,7 @@
 package com.parkit.parkingsystem.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Date;
 
 import org.junit.jupiter.api.DisplayName;
@@ -67,23 +64,6 @@ public class TicketDAOTest {
 
 		// THEN
 		assertEquals(true, ticketDAO.updateTicket(ticketReturned));
-	}
-
-	@DisplayName("Test pour vérifier un user reccurent en BDD")
-	@Test
-	public void isReccurentUser() throws SQLException, ClassNotFoundException, IOException {
-
-		// GIVEN
-		TicketDAO ticketDAO = new TicketDAO();
-		Ticket ticket = new Ticket();
-
-		// WHEN
-		ticket.setVehicleRegNumber("ABCDEF");
-		boolean isTrue = ticketDAO.isReccurentUser(ticket.getVehicleRegNumber());
-
-		// THEN
-		assertTrue(isTrue);
-
 	}
 
 }

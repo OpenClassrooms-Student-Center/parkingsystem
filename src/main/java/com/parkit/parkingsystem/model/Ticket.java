@@ -78,6 +78,4 @@ public class Ticket {
 		this.discount = discount;
 	}
 
-
-
 }

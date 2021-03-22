@@ -90,31 +90,23 @@ public class TicketDAO {
 
 	// verifie si un user est un reccurent user
 	public boolean isReccurentUser(String vehicleRegNumber) {
+		DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
+		Boolean isRecurring = true;
 		try {
 			con = dataBaseConfig.getConnection();
-			ps = con.prepareStatement(DBConstants.VERIFY_IF_REGULAR_USER);
+			PreparedStatement ps = con.prepareStatement(DBConstants.GET_RECURRING_USERS);
 			ps.setString(1, vehicleRegNumber);
-			rs = ps.executeQuery();
-
+			ResultSet rs = ps.executeQuery();
 			if (rs.next()) {
-				return rs.getBoolean(1);
-
+				isRecurring = false;
 			}
-			System.out.println(
-					"Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
-
 		} catch (Exception ex) {
-			logger.error("Error identification User", ex);
+			logger.error("Unable to get recurring users from database", ex);
 		} finally {
-			dataBaseConfig.closeResultSet(rs);
-			dataBaseConfig.closePreparedStatement(ps);
 			dataBaseConfig.closeConnection(con);
-
 		}
-		return true;
+		return isRecurring;
 	}
 
 }
