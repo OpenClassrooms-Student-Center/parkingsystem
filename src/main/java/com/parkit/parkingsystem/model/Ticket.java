@@ -77,4 +77,5 @@ public class Ticket {
 	public void setDiscount(double discount) {
 		this.discount = discount;
 	}
+
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.AfterAll;
@@ -30,6 +31,7 @@ public class ParkingDataBaseIT {
 	private static ParkingSpotDAO parkingSpotDAO;
 	private static TicketDAO ticketDAO;
 	private static DataBasePrepareService dataBasePrepareService;
+	private ParkingType parkingType;
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
@@ -81,6 +83,24 @@ public class ParkingDataBaseIT {
 		Ticket ticket = ticketDAO.getTicket("ABCDEF");
 		assertNotEquals(0, ticket.getPrice());
 		assertNotEquals(0, ticket.getOutTime());
+	}
+
+	@Test
+
+	public void testRecurrentUserReductionMessage() throws Exception {
+		// GIVEN
+		when(inputReaderUtil.readSelection()).thenReturn(1);
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF2");
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingType = ParkingType.CAR;
+		parkingSpotDAO.getNextAvailableSlot(parkingType);
+
+		// WHEN
+		parkingService.processIncomingVehicle();
+
+		// THEN
+		boolean result = ticketDAO.isReccurentUser("ABCDEF2");
+		assertTrue(result);
 	}
 
 }

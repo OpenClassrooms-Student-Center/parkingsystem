@@ -1,25 +1,26 @@
-package com.parkit.parkingsystem;
+package com.parkit.parkingsystem.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Date;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 
 public class TicketDAOTest {
 
-	public static final String vehicleReg = "JOJO";
+	public static final String vehicleReg = "TOTO";
 
+	@DisplayName("Test pour sauvegarder un ticket en BDD")
 	@Test
 	public void saveTicketTest() {
 
+		// GIVEN
 		Ticket ticket = new Ticket();
-		// ticket properties.
 		ticket.setAReccuringUser(false);
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -28,26 +29,40 @@ public class TicketDAOTest {
 		ticket.setVehicleRegNumber(vehicleReg);
 		ticket.setPrice(0);
 
+		// WHEN
 		TicketDAO ticketDAO = new TicketDAO();
 		boolean result = ticketDAO.saveTicket(ticket);
-		// That doesn't seem to be a clean way of making it.
+
+		// THEN
 		assertEquals(false, result);
 	}
 
+	@DisplayName("Test pour recuperer un ticket dans une BDD")
 	@Test
 	public void getTicketTest() {
-		saveTicketTest();
+
+		// GIVEN
 		TicketDAO ticketDAO = new TicketDAO();
+
+		// WHEN
 		Ticket ticketReturned = ticketDAO.getTicket(vehicleReg);
+
+		// THEN
 		assertEquals(ticketReturned.getClass(), Ticket.class);
 	}
 
+	@DisplayName("Test pour mettre à jour un ticket en BDD")
 	@Test
 	public void updateTicketTest() {
-		saveTicketTest();
+
+		// GIVEN
 		TicketDAO ticketDAO = new TicketDAO();
+
+		// WHEN
 		Ticket ticketReturned = ticketDAO.getTicket(vehicleReg);
 		ticketReturned.setOutTime(new Date(System.currentTimeMillis()));
+
+		// THEN
 		assertEquals(true, ticketDAO.updateTicket(ticketReturned));
 	}
 
