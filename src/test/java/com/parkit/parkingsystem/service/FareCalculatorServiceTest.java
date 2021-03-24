@@ -212,6 +212,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Stationnement 30min gratuit une voiture")
 	public void calculateFareCarLess30Min() {
 		// GIVEN
 		Date inTime = new Date();
@@ -232,12 +233,12 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	@DisplayName("Stationnement 30min gratuit voiture")
+	@DisplayName("Stationnement 30min gratuit un vélo")
 	public void calculateFareBikeLess30Min() {
 		// GIVEN
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (30 * 60 * 1000));
-		Date outTime = DateUtils.addMinutes(inTime, 0);
+		Date outTime = DateUtils.addMinutes(inTime, 30);
 		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
 
 		ticket.setInTime(inTime);
@@ -252,6 +253,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
+	@DisplayName("Stationnement recurrent user pour une voiture")
 	public void calculateFareCarForRecurrentUsers() {
 		// TODO: check that the fare generated has a discount of 5% --> DONE
 
