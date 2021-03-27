@@ -6,6 +6,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 public class DataBaseTestConfig extends DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
@@ -14,38 +17,38 @@ public class DataBaseTestConfig extends DataBaseConfig {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/parkingsystem2","root","");
+                "jdbc:mysql://localhost:3306/parkingsystem3","root","");
     }
 
     public void closeConnection(Connection con){
-        if(con!=null){
+        if(null != con){
             try {
                 con.close();
                 logger.info("Closing DB connection");
             } catch (SQLException e) {
-                logger.error("Error while closing connection",e);
+                logger.error("Error while closing connection", e);
             }
         }
     }
 
     public void closePreparedStatement(PreparedStatement ps) {
-        if(ps!=null){
+        if(null != ps){
             try {
                 ps.close();
                 logger.info("Closing Prepared Statement");
             } catch (SQLException e) {
-                logger.error("Error while closing prepared statement",e);
+                logger.error("Error while closing prepared statement", e);
             }
         }
     }
 
     public void closeResultSet(ResultSet rs) {
-        if(rs!=null){
+        if(null != rs){
             try {
                 rs.close();
                 logger.info("Closing Result Set");
             } catch (SQLException e) {
-                logger.error("Error while closing result set",e);
+                logger.error("Error while closing result set", e);
             }
         }
     }

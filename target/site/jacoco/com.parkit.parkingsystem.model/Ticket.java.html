@@ -2,8 +2,12 @@
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
-<span class="fc" id="L6">public class Ticket {</span>
+/**
+ * @author Philémon Globléhi &lt;philemon.globlehi@gmail.com&gt;
+ */
+<span class="fc" id="L10">public class Ticket {</span>
     private int id;
     private ParkingSpot parkingSpot;
     private String vehicleRegNumber;
@@ -12,51 +16,80 @@ import java.util.Date;
     private Date outTime;
 
     public int getId() {
-<span class="fc" id="L15">        return id;</span>
+<span class="nc" id="L19">        return id;</span>
     }
 
     public void setId(int id) {
-<span class="fc" id="L19">        this.id = id;</span>
-<span class="fc" id="L20">    }</span>
+<span class="nc" id="L23">        this.id = id;</span>
+<span class="nc" id="L24">    }</span>
 
     public ParkingSpot getParkingSpot() {
-<span class="fc" id="L23">        return parkingSpot;</span>
+<span class="fc" id="L27">        return parkingSpot;</span>
     }
 
     public void setParkingSpot(ParkingSpot parkingSpot) {
-<span class="fc" id="L27">        this.parkingSpot = parkingSpot;</span>
-<span class="fc" id="L28">    }</span>
+<span class="fc" id="L31">        this.parkingSpot = parkingSpot;</span>
+<span class="fc" id="L32">    }</span>
 
     public String getVehicleRegNumber() {
-<span class="fc" id="L31">        return vehicleRegNumber;</span>
+<span class="fc" id="L35">        return vehicleRegNumber;</span>
     }
 
     public void setVehicleRegNumber(String vehicleRegNumber) {
-<span class="fc" id="L35">        this.vehicleRegNumber = vehicleRegNumber;</span>
-<span class="fc" id="L36">    }</span>
+<span class="fc" id="L39">        this.vehicleRegNumber = vehicleRegNumber;</span>
+<span class="fc" id="L40">    }</span>
 
     public double getPrice() {
-<span class="fc" id="L39">        return price;</span>
+<span class="fc" id="L43">        return price;</span>
     }
 
     public void setPrice(double price) {
-<span class="fc" id="L43">        this.price = price;</span>
-<span class="fc" id="L44">    }</span>
+<span class="fc" id="L47">        this.price = price;</span>
+<span class="fc" id="L48">    }</span>
 
     public Date getInTime() {
-<span class="fc" id="L47">        return inTime;</span>
+<span class="fc" id="L51">        return inTime;</span>
     }
 
     public void setInTime(Date inTime) {
-<span class="fc" id="L51">        this.inTime = inTime;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L55">        this.inTime = inTime;</span>
+<span class="fc" id="L56">    }</span>
 
     public Date getOutTime() {
-<span class="fc" id="L55">        return outTime;</span>
+<span class="fc" id="L59">        return outTime;</span>
     }
 
     public void setOutTime(Date outTime) {
-<span class="fc" id="L59">        this.outTime = outTime;</span>
-<span class="fc" id="L60">    }</span>
+<span class="fc" id="L63">        this.outTime = outTime;</span>
+<span class="fc" id="L64">    }</span>
+
+    @Override
+    public boolean equals(Object o) {
+<span class="nc bnc" id="L68" title="All 2 branches missed.">        if (this == o) {</span>
+<span class="nc" id="L69">            return true;</span>
+        }
+<span class="nc bnc" id="L71" title="All 4 branches missed.">        if (null == o || getClass() != o.getClass()) {</span>
+<span class="nc" id="L72">            return false;</span>
+        }
+<span class="nc" id="L74">        Ticket ticket = (Ticket) o;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">        return id == ticket.id;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L80">        return id;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="nc" id="L85">        return &quot;Ticket{&quot; +</span>
+                &quot;id=&quot; + id +
+                &quot;, parkingSpot=&quot; + parkingSpot +
+                &quot;, vehicleRegNumber='&quot; + vehicleRegNumber + '\'' +
+                &quot;, price=&quot; + price +
+                &quot;, inTime=&quot; + inTime +
+                &quot;, outTime=&quot; + outTime +
+                '}';
+    }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>
