@@ -2,6 +2,9 @@ package com.parkit.parkingsystem.model;
 
 import com.parkit.parkingsystem.constants.ParkingType;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 public class ParkingSpot {
     private int number;
     private ParkingType parkingType;
@@ -39,8 +42,12 @@ public class ParkingSpot {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (null == o || getClass() != o.getClass()) {
+            return false;
+        }
         ParkingSpot that = (ParkingSpot) o;
         return number == that.number;
     }
@@ -48,5 +55,14 @@ public class ParkingSpot {
     @Override
     public int hashCode() {
         return number;
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingSpot{" +
+                "number=" + number +
+                ", parkingType=" + parkingType +
+                ", isAvailable=" + isAvailable +
+                '}';
     }
 }

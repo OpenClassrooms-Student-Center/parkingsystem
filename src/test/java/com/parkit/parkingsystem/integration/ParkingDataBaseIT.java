@@ -15,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 @ExtendWith(MockitoExtension.class)
 public class ParkingDataBaseIT {
 

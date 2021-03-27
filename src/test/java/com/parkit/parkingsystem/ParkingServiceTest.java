@@ -18,6 +18,9 @@ import java.util.Date;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
@@ -37,7 +40,7 @@ public class ParkingServiceTest {
 
             ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
             Ticket ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
+            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
             ticket.setParkingSpot(parkingSpot);
             ticket.setVehicleRegNumber("ABCDEF");
             when(ticketDAO.getTicket(anyString())).thenReturn(ticket);

@@ -12,6 +12,9 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
@@ -49,7 +52,6 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-//        assertEquals(ticket.getPrice(), Fare.CAR_RATE_PER_HOUR);
         assertThat(Fare.CAR_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
 
@@ -62,7 +64,6 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-//        assertEquals(ticket.getPrice(), Fare.BIKE_RATE_PER_HOUR);
         assertThat(Fare.BIKE_RATE_PER_HOUR).isEqualTo(ticket.getPrice());
     }
 
@@ -74,7 +75,6 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-//        assertThrows(NullPointerException.class, () -> fareCalculatorService.calculateFare(ticket));
         assertThatThrownBy(() -> fareCalculatorService.calculateFare(ticket)).isInstanceOf(NullPointerException.class);
     }
 
@@ -86,7 +86,6 @@ public class FareCalculatorServiceTest {
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ticket.setParkingSpot(parkingSpot);
-//        assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
         assertThatThrownBy(() -> fareCalculatorService.calculateFare(ticket)).isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -100,7 +99,6 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         duration = outTime.getHours() - inTime.getHours();
-//        assertEquals((duration * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
         assertThat(ticket.getPrice()).isEqualTo((duration * Fare.BIKE_RATE_PER_HOUR));
     }
 
@@ -114,7 +112,6 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         duration = outTime.getHours() - inTime.getHours();
-//        assertEquals((duration * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
         assertThat(ticket.getPrice()).isEqualTo((duration * Fare.CAR_RATE_PER_HOUR));
     }
 
@@ -128,7 +125,6 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         duration = outTime.getHours() - inTime.getHours();
-//        assertEquals((duration * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
         assertThat(ticket.getPrice()).isEqualTo((duration * Fare.CAR_RATE_PER_HOUR));
     }
 
