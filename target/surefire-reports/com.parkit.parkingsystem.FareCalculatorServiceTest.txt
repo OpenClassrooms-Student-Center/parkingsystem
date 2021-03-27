@@ -1,8 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: com.parkit.parkingsystem.FareCalculatorServiceTest
 -------------------------------------------------------------------------------
-Tests run: 7, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.296 s <<< FAILURE! - in com.parkit.parkingsystem.FareCalculatorServiceTest
-calculateFareCarWithLessThanOneHourParkingTime  Time elapsed: 0.228 s  <<< FAILURE!
+Tests run: 7, Failures: 3, Errors: 0, Skipped: 0, Time elapsed: 0.456 s <<< FAILURE! - in com.parkit.parkingsystem.FareCalculatorServiceTest
+calculateFareCarWithLessThanOneHourParkingTime  Time elapsed: 0.396 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 
 Expecting:
@@ -12,7 +12,7 @@ to be equal to:
 but was not.
 	at com.parkit.parkingsystem.FareCalculatorServiceTest.calculateFareCarWithLessThanOneHourParkingTime(FareCalculatorServiceTest.java:115)
 
-calculateFareCarWithMoreThanADayParkingTime  Time elapsed: 0.003 s  <<< FAILURE!
+calculateFareCarWithMoreThanADayParkingTime  Time elapsed: 0.002 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 
 Expecting:
@@ -22,7 +22,7 @@ to be equal to:
 but was not.
 	at com.parkit.parkingsystem.FareCalculatorServiceTest.calculateFareCarWithMoreThanADayParkingTime(FareCalculatorServiceTest.java:128)
 
-calculateFareBikeWithLessThanOneHourParkingTime  Time elapsed: 0.004 s  <<< FAILURE!
+calculateFareBikeWithLessThanOneHourParkingTime  Time elapsed: 0.002 s  <<< FAILURE!
 org.opentest4j.AssertionFailedError: 
 
 Expecting:

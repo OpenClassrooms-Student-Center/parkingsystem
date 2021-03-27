@@ -4,6 +4,7 @@ com/parkit/parkingsystem/model/Ticket.class
 com/parkit/parkingsystem/config/DataBaseConfig.class
 com/parkit/parkingsystem/service/InteractiveShell.class
 com/parkit/parkingsystem/service/FareCalculatorService.class
+com/parkit/parkingsystem/util/Singleton.class
 com/parkit/parkingsystem/service/ParkingService.class
 com/parkit/parkingsystem/constants/ParkingType.class
 com/parkit/parkingsystem/util/InputReaderUtil.class
