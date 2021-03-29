@@ -14,12 +14,14 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 public class DataBaseTestConfig extends DataBaseConfig {
 
 	private static final Logger logger = LogManager.getLogger("DataBaseTestConfig");
+	Connection myConn = null;
 
 	@Override
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		logger.info("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/test", "root", "rootroot");
+		return myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/prod?useSSL=false&serverTimezone=UTC",
+				"root", "rootroot");
 	}
 
 	@Override

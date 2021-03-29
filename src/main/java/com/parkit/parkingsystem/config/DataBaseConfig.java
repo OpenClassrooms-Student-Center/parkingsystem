@@ -12,11 +12,14 @@ import org.apache.logging.log4j.Logger;
 public class DataBaseConfig {
 
 	private static final Logger logger = LogManager.getLogger("DataBaseConfig");
+	Connection myConn = null;
 
 	public Connection getConnection() throws ClassNotFoundException, SQLException {
 		logger.info("Create DB connection");
 		Class.forName("com.mysql.cj.jdbc.Driver");
-		return DriverManager.getConnection("jdbc:mysql://localhost:3306/prod", "root", "rootroot");
+		return myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/prod?useSSL=false&serverTimezone=UTC",
+				"root", "rootroot");
+
 	}
 
 	public void closeConnection(Connection con) {
