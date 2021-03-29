@@ -8,7 +8,6 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -50,8 +50,7 @@ public class TicketDAOTest {
         assertEquals(ticketEnter.getParkingSpot(), ticketExit.getParkingSpot());
         assertEquals(ticketEnter.getPrice(), ticketExit.getPrice());
         assertEquals(ticketEnter.getVehicleRegNumber(), ticketExit.getVehicleRegNumber());
-//        assertEquals(ticketEnter.getInTime().toString(), ticketExit.getInTime().toString());
-
+        assertNotNull(ticketEnter.getInTime());
 
     }
 }
