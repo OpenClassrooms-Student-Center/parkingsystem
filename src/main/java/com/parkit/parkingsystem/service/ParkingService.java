@@ -26,21 +26,21 @@ public class ParkingService {
 	private static final Logger logger = LogManager.getLogger("ParkingService");
 
 	/**
-	 * instantiation fareCaclculatorService
+	 * instantiation fare CalculatorService
 	 */
-	private static FareCalculatorService fareCalculatorService = new FareCalculatorService();
+	private final static FareCalculatorService fareCalculatorService = new FareCalculatorService();
 	/**
 	 * InputReaderUtil object
 	 */
-	private InputReaderUtil inputReaderUtil;
+	private final InputReaderUtil inputReaderUtil;
 	/**
 	 * ParkingSpotDAO object
 	 */
-	private ParkingSpotDAO parkingSpotDAO;
+	private final ParkingSpotDAO parkingSpotDAO;
 	/**
 	 * TicketDAO object
 	 */
-	private TicketDAO ticketDAO;
+	private final TicketDAO ticketDAO;
 
 	/**
 	 * class constructor
@@ -76,6 +76,9 @@ public class ParkingService {
 				ticket.setInTime(inTime);
 				ticket.setOutTime(null);
 				ticketDAO.saveTicket(ticket);
+				if (ticketDAO.isReccurent(ticket)) {
+					System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount.");
+				}
 				System.out.println("Generated Ticket and saved in DB");
 				System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
 				System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
@@ -86,7 +89,7 @@ public class ParkingService {
 	}
 
 	/**
-	 * method to call readVehiculeRegistrationNumber to inputReaderUtil class
+	 * method to call readVehicleRegistrationNumber to inputReaderUtil class
 	 *
 	 * @return String: registration vehicle number
 	 * @throws IllegalArgumentException
@@ -104,7 +107,7 @@ public class ParkingService {
 	 *                   incorrect
 	 */
 	public ParkingSpot getNextParkingNumberIfAvailable() {
-		int parkingNumber = 0;
+		int parkingNumber;
 		ParkingSpot parkingSpot = null;
 		try {
 			ParkingType parkingType = getVehicleType();
@@ -126,7 +129,7 @@ public class ParkingService {
 	 * get incoming vehicle type
 	 *
 	 * @return the select type parking
-	 * @throws IllegaleArgumentException if the type is incorrect
+	 * @throws IllegalArgumentException if the type is incorrect
 	 */
 	private ParkingType getVehicleType() {
 		System.out.println("Please select vehicle type from menu");
