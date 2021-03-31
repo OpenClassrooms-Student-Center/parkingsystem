@@ -24,8 +24,8 @@ import com.parkit.parkingsystem.service.FareCalculatorService;
 
 /**
  *
- * @author Nicolas BIANCUCCI this class contains FareCalculatorService unit
- *         tests
+ * @author Nicolas BIANCUCCI
+ * this class contains FareCalculatorService unit tests
  */
 
 @ExtendWith(MockitoExtension.class)

@@ -28,7 +28,7 @@ public class ParkingDataBaseIT {
 
     private static final String VehicleRegNumber = "ABCDEF";
 
-    private static DataBaseTestConfig     dataBaseTestConfig = new DataBaseTestConfig();
+    private final static DataBaseTestConfig     dataBaseTestConfig = new DataBaseTestConfig();
     private static DataBasePrepareService dataBasePrepareService;
     @Spy
     private static ParkingSpotDAO         parkingSpotDAO;
@@ -61,7 +61,7 @@ public class ParkingDataBaseIT {
         dataBasePrepareService.clearDataBaseEntries();
     }
 
-    @DisplayName("Parking system save ticket to DB and Update parkingspot with avaibility")
+    @DisplayName("Parking system save ticket to DB and Update parkingSpot with availability")
     @Test
     public void testParkingACar() {
 
@@ -74,7 +74,6 @@ public class ParkingDataBaseIT {
         Mockito.verify(parkingSpotDAO).updateParking(Mockito.any(ParkingSpot.class));
         assertEquals(2, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
 
-        //        Mockito.when(parkingSpotDAO.getNextAvailableSlot(Mockito.any())).thenReturn(1);
     }
 
     @DisplayName("Parking system generated fare and out tim saving to DB")
@@ -97,24 +96,4 @@ public class ParkingDataBaseIT {
         assertEquals(1, numberOfNextAvailableSlot);
     }
 }
-//        Ticket ticket = ticketDAO.getTicket(VehicleRegNumber);
-//        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
 //
-//        assertNotNull(ticketDAO.getTicket("ABCDEF").getPrice());
-//        assertNotNull(ticketDAO.getTicket("ABCDEF").getOutTime());
-//        assertEquals(0.0, ticketDAO.getTicket("ABCDEF").getPrice());
-
-//        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
-//		Ticket ticket = new Ticket();
-//		ticket.setParkingSpot(parkingSpot);
-//		ticket.setVehicleRegNumber(VehicleRegNumber);
-//		ticket.setPrice(0);
-//		ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-//		ticket.setOutTime(null);
-//		ticketDAO.saveTicket(ticket);
-//		Mockito.when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-//		Mockito.when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-//		Mockito.when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
-
-//		ParkingService parkingServiceOut = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-//		Assertions.assertEquals(1.5, ticket.getPrice());
