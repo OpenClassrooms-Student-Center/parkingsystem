@@ -35,9 +35,17 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
-            dataBaseConfig.closeConnection(con);
-            return false;
+            if (con!= null) {
+            	try {
+            		dataBaseConfig.closeConnection(con);
+            	} catch (Exception e) {
+            	
+            	}
+            	
+            }
         }
+            return false;
+        
     }
 
     public Ticket getTicket(String vehicleRegNumber) {
@@ -64,10 +72,18 @@ public class TicketDAO {
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
+        	if (con!= null) {
+            	try {
+            		dataBaseConfig.closeConnection(con);
+            	} catch (Exception e) {
+            	
+            	}
+            	
+            }
+        }
             dataBaseConfig.closeConnection(con);
             return ticket;
         }
-    }
 
     public boolean updateTicket(Ticket ticket) {
         Connection con = null;
@@ -86,4 +102,35 @@ public class TicketDAO {
         }
         return false;
     }
+    
+    /**
+	 * Request of a vehicleRegNumber to see it's recurrence in parking
+	 * 
+	 * @return ticket quantity
+	 */
+	public int countTicketByVehiculeRegNumber(String vehicleRegNumber) {
+		Connection con = null;
+		int ticketQuantity = 0;
+		try {
+			con = dataBaseConfig.getConnection();
+
+			PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_ID);
+			ps.setString(1, vehicleRegNumber);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			ticketQuantity = rs.getInt(1);
+
+		} catch (Exception ex) {
+			logger.error("Error counting recurrent id for vehicle", ex);
+		} finally {
+			if (con != null) {
+				try {
+					dataBaseConfig.closeConnection(con);
+				} catch (Exception e) {
+				}
+			}
+		}
+
+		return ticketQuantity;
+	}
 }
