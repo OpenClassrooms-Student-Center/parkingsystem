@@ -10,18 +10,20 @@ import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
+
+import org.hamcrest.core.IsEqual;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.mockito.internal.matchers.Equals;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
-import java.sql.Date;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,12 +38,9 @@ public class ParkingDataBaseIT {
 
 	@Mock
 	private static InputReaderUtil inputReaderUtil;
-	private static FareCalculatorService fareCalculatorService;
-	private static ParkingSpot parkingSpot;
 
 	@BeforeAll
 	private static void setUp() throws Exception {
-		fareCalculatorService = new FareCalculatorService();
 		parkingSpotDAO = new ParkingSpotDAO();
 		parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
 		ticketDAO = new TicketDAO();
@@ -52,7 +51,7 @@ public class ParkingDataBaseIT {
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
 		when(inputReaderUtil.readSelection()).thenReturn(1);
-		Mockito.lenient().when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 		dataBasePrepareService.clearDataBaseEntries();
 	}
 
@@ -78,19 +77,16 @@ public class ParkingDataBaseIT {
 
 	@Test
 	public void testParkingLotExit() throws Exception {
-		testParkingACar();
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
-		Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
-		Date outTime = new Date(0);
-        outTime.setTime(System.currentTimeMillis() + 31 * 60 * 1000);
-        ticket.setOutTime(outTime);
-		ticketDAO.saveTicket(ticket);
-		parkingSpotDAO.updateParking(parkingSpot);
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingService.processIncomingVehicle();
+		TimeUnit.SECONDS.sleep(1);
 		parkingService.processExitingVehicle();
+		
+		Ticket ticket = ticketDAO.getTicket(inputReaderUtil.readVehicleRegistrationNumber());
 		assertThat(ticket.getOutTime()).isAfter(ticket.getInTime());
-		assertThat(ticket.getPrice()).isGreaterThan(0);
+		assertThat(ticket.getPrice()).isEqualTo(0.0);
 	}
 
 }

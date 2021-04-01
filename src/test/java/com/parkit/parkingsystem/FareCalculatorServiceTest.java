@@ -2,6 +2,8 @@ package com.parkit.parkingsystem;
 
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.dao.TicketDAO;
+import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
 import com.parkit.parkingsystem.service.FareCalculatorService;
@@ -127,4 +129,62 @@ public class FareCalculatorServiceTest {
 		assertEquals((24 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
 	}
 
+	@Test
+	public void calculateFareBikeWithLessThanHalfAnHourParkingTime() {
+		Date inTime = new Date();
+		inTime.setTime(System.currentTimeMillis() - (29 * 60 * 1000));// Free 30 minutes parking time should give fare=0
+
+		Date outTime = new Date();
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+		fareCalculatorService.calculateFare(ticket);
+		assertEquals((0), ticket.getPrice());
+	}
+
+	@Test
+	public void calculateFareCarWithLessThanHalfAnHourParkingTime() {
+		Date inTime = new Date();
+		inTime.setTime(System.currentTimeMillis() - (29 * 60 * 1000));// Free 30 minutes parking time should give fare=0
+		Date outTime = new Date();
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+		fareCalculatorService.calculateFare(ticket);
+		assertEquals((0), ticket.getPrice());
+	}
+	
+	@Test
+	public void calculateFareCarWithRecurringFivePercentDiscount() {
+
+		Date inTime = new Date();
+		inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
+		Date outTime = new Date();
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+		TicketDAO ticketDao = new TicketDAO();
+		ticketDao.dataBaseConfig = new DataBaseTestConfig();
+
+		ticket.setVehicleRegNumber("ABCDEF");
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+
+		int ticketQuantity = 2;
+		double inHour = ticket.getInTime().getTime();
+		double outHour = ticket.getOutTime().getTime();
+		double duration = ((double) (outHour - inHour) / 3600000);
+		if (ticketQuantity > 1) {
+			ticket.setPrice(duration * Fare.CAR_WITH_DISCOUNT);
+			System.out.println("As a recurring user, you benefit from a 5% discount="
+					+ duration * Fare.CAR_WITH_DISCOUNT);
+		} else {
+
+			ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
+		}
+		assertEquals((Fare.CAR_RATE_PER_HOUR * 0.95), ticket.getPrice(), 0.001);
+	}
 }
