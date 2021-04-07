@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingDataBaseIT {
+class ParkingDataBaseIT {
 
 	private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
 	private static ParkingSpotDAO parkingSpotDAO;
@@ -58,7 +58,7 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingACar() throws Exception {
+	void testParkingACar() throws Exception {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
 		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
@@ -73,7 +73,7 @@ public class ParkingDataBaseIT {
 	}
 
 	@Test
-	public void testParkingLotExit() throws Exception {
+	void testParkingLotExit() throws Exception {
 		// TODO: check that the fare generated and out time are populated correctly in
 		// the database
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
