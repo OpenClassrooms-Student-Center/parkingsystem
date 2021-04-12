@@ -11,6 +11,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Date;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 public class ParkingService {
 
     private static final Logger logger = LogManager.getLogger("ParkingService");
@@ -30,15 +33,13 @@ public class ParkingService {
     public void processIncomingVehicle() {
         try{
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
-            if(parkingSpot !=null && parkingSpot.getId() > 0){
+            if( null != parkingSpot && 0 < parkingSpot.getId()){
                 String vehicleRegNumber = getVehichleRegNumber();
                 parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
+                parkingSpotDAO.updateParking(parkingSpot);
 
                 Date inTime = new Date();
                 Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
@@ -46,11 +47,11 @@ public class ParkingService {
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
                 System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number:"+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number:"+vehicleRegNumber+" is:"+inTime);
+                System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
+                System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:"+inTime);
             }
         }catch(Exception e){
-            logger.error("Unable to process incoming vehicle",e);
+            logger.error("Unable to process incoming vehicle", e);
         }
     }
 
@@ -60,13 +61,13 @@ public class ParkingService {
     }
 
     public ParkingSpot getNextParkingNumberIfAvailable(){
-        int parkingNumber=0;
+        int parkingNumber = 0;
         ParkingSpot parkingSpot = null;
         try{
             ParkingType parkingType = getVehichleType();
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
-            if(parkingNumber > 0){
-                parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
+            if(0 < parkingNumber){
+                parkingSpot = new ParkingSpot(parkingNumber, parkingType, true);
             }else{
                 throw new Exception("Error fetching parking number from DB. Parking slots might be full");
             }
@@ -114,7 +115,7 @@ public class ParkingService {
                 System.out.println("Unable to update ticket information. Error occurred");
             }
         }catch(Exception e){
-            logger.error("Unable to process exiting vehicle",e);
+            logger.error("Unable to process exiting vehicle", e);
         }
     }
 }

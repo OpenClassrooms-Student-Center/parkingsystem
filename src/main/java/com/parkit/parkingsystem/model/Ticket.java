@@ -2,7 +2,11 @@ package com.parkit.parkingsystem.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
+/**
+ * @author Philémon Globléhi <philemon.globlehi@gmail.com>
+ */
 public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
@@ -57,5 +61,34 @@ public class Ticket {
 
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (null == o || getClass() != o.getClass()) {
+            return false;
+        }
+        Ticket ticket = (Ticket) o;
+        return id == ticket.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", parkingSpot=" + parkingSpot +
+                ", vehicleRegNumber='" + vehicleRegNumber + '\'' +
+                ", price=" + price +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                '}';
     }
 }
