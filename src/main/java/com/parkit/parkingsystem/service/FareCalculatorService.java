@@ -4,8 +4,12 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FareCalculatorService {
+	
+	private static final Logger logger = LogManager.getLogger(FareCalculatorService.class);
 
 	public void calculateFare(Ticket ticket) {
 		if ((ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))) {
@@ -30,7 +34,7 @@ public class FareCalculatorService {
 				int ticketQuantity = ticketDao.countTicketByVehiculeRegNumber(ticket.getVehicleRegNumber());
 				if (ticketQuantity > 1) {
 					ticket.setPrice(duration * Fare.CAR_WITH_DISCOUNT);
-					System.out.println(
+					logger.info(
 							"As a recurring user, you benefit from a 5% discount=" + duration * Fare.CAR_WITH_DISCOUNT);
 				} else {
 					ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
@@ -43,7 +47,7 @@ public class FareCalculatorService {
 				int ticketQuantity = ticketDao.countTicketByVehiculeRegNumber(ticket.getVehicleRegNumber());
 				if (ticketQuantity > 1) {
 					ticket.setPrice(duration * Fare.BIKE_WITH_DISCOUNT);
-					System.out.println("As a recurring user of our parking lot, you benefit from a discount="
+					logger.info("As a recurring user of our parking lot, you benefit from a discount="
 							+ duration * Fare.BIKE_WITH_DISCOUNT);
 				} else {
 					ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
