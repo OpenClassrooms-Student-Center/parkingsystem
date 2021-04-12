@@ -14,7 +14,7 @@ public class InteractiveShell {
 
     public static void loadInterface(){
         logger.info("App initialized!!!");
-        System.out.println("Welcome to Parking System!");
+        logger.info("Welcome to Parking System!");
 
         boolean continueApp = true;
         InputReaderUtil inputReaderUtil = new InputReaderUtil();
@@ -35,20 +35,20 @@ public class InteractiveShell {
                     break;
                 }
                 case 3: {
-                    System.out.println("Exiting from the system!");
+                    logger.info("Exiting from the system!");
                     continueApp = false;
                     break;
                 }
-                default: System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
+                default: logger.error("Unsupported option. Please enter a number corresponding to the provided menu");
             }
         }
     }
 
     private static void loadMenu(){
-        System.out.println("Please select an option. Simply enter the number to choose an action");
-        System.out.println("1 New Vehicle Entering - Allocate Parking Space");
-        System.out.println("2 Vehicle Exiting - Generate Ticket Price");
-        System.out.println("3 Shutdown System");
+        logger.info("Please select an option. Simply enter the number to choose an action");
+        logger.info("1 New Vehicle Entering - Allocate Parking Space");
+        logger.info("2 Vehicle Exiting - Generate Ticket Price");
+        logger.info("3 Shutdown System");
     }
 
 }
