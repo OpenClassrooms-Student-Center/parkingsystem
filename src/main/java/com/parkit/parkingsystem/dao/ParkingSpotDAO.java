@@ -12,7 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class ParkingSpotDAO {
-    private static final Logger logger = LogManager.getLogger("ParkingSpotDAO");
+    private static final Logger logger = LogManager.getLogger(ParkingSpotDAO.class);
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
@@ -29,6 +29,7 @@ public class ParkingSpotDAO {
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
+            logger.info("Next available slot get.");
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
@@ -47,9 +48,10 @@ public class ParkingSpotDAO {
             ps.setInt(2, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();
             dataBaseConfig.closePreparedStatement(ps);
+            logger.info("Parking availability updated.");
             return (updateRowCount == 1);
         }catch (Exception ex){
-            logger.error("Error updating parking info",ex);
+            logger.error("Error updating parking availability",ex);
             return false;
         }finally {
             dataBaseConfig.closeConnection(con);

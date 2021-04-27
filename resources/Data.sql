@@ -1,5 +1,5 @@
 /* Setting up PROD DB */
-create database prod;
+/*create database prod;*/
 use prod;
 
 create table parking(
@@ -15,6 +15,8 @@ create table ticket(
  PRICE double,
  IN_TIME DATETIME NOT NULL,
  OUT_TIME DATETIME,
+ IS_RECURRENT BIT DEFAULT false,
+ LAST_UPDATED BIT DEFAULT true,
  FOREIGN KEY (PARKING_NUMBER)
  REFERENCES parking(PARKING_NUMBER));
 
@@ -42,6 +44,8 @@ create table ticket(
  PRICE double,
  IN_TIME DATETIME NOT NULL,
  OUT_TIME DATETIME,
+ IS_RECURRENT BIT DEFAULT false,
+ LAST_UPDATED BIT DEFAULT true,
  FOREIGN KEY (PARKING_NUMBER)
  REFERENCES parking(PARKING_NUMBER));
 

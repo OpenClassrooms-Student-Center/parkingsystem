@@ -17,12 +17,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes=ParkingSpotDAO.class)
-public class ParkingDataBaseIT {
+public class ParkingExitIT {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
@@ -40,33 +42,30 @@ public class ParkingDataBaseIT {
         ticketDAO = new TicketDAO();
         ticketDAO.dataBaseConfig = dataBaseTestConfig;
         dataBasePrepareService = new DataBasePrepareService();
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @BeforeEach
     private void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ticket.setVehicleRegNumber("ABCDE");
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDE");
+        parkingService.processIncomingVehicle();
     }
 
-    @AfterAll
-    private static void tearDown(){
-
-    }
 
     @Test
-    public void testParkingACar() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
+    public void testParkingLotExit() throws Exception {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        this.ticket.setVehicleRegNumber("1111");
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("1111");
-        parkingService.processIncomingVehicle();
+        parkingService.processExitingVehicle();
         Ticket ticketSavedInDB = ticketDAO.getTicket(ticket.getVehicleRegNumber());
+        TimeUnit.SECONDS.sleep(1);
         assertNotNull(ticketSavedInDB);
-        assertNotNull(ticketSavedInDB.getInTime());
+        assertNotNull(ticketSavedInDB.getOutTime());
         assertNotNull(ticketSavedInDB.getParkingSpot());
-        assertEquals(1, ticketSavedInDB.getParkingSpot().getId());
-        assertFalse(ticketSavedInDB.getParkingSpot().isAvailable());
-
+        assertNotNull(ticketSavedInDB.getPrice());
+        dataBasePrepareService.clearDataBaseEntries();
     }
-
 
 }
