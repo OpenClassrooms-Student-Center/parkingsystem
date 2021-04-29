@@ -19,6 +19,11 @@ public class FareCalculatorService {
 		// TODO: Some tests are failing here. Need to check if this logic is correct
 		long duration = ChronoUnit.SECONDS.between(inHour, outHour);
 
+		// duration set to zero if less than 30 minutes
+		if (duration < 30 * 60) {
+			duration = 0;
+		}
+
 		switch (ticket.getParkingSpot().getParkingType()) {
 		case CAR: {
 			ticket.setPrice((duration * Fare.CAR_RATE_PER_HOUR) / 3600);

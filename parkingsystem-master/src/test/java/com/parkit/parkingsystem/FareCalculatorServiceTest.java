@@ -127,4 +127,32 @@ public class FareCalculatorServiceTest {
 		assertEquals((48 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
 	}
 
+	@Test
+	public void calculateFareBikeWithLessThanThirtyMinutesParkingTime() {
+		LocalDateTime inTime = LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(29);
+		LocalDateTime outTime = LocalDateTime.now(ZoneId.systemDefault());
+
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
+
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+		fareCalculatorService.calculateFare(ticket);
+		assertEquals((0 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
+	}
+
+	@Test
+	public void calculateFareCarWithLessThanThirtyMinutesParkingTime() {
+		LocalDateTime inTime = LocalDateTime.now(ZoneId.systemDefault()).minusMinutes(29);
+		LocalDateTime outTime = LocalDateTime.now(ZoneId.systemDefault());
+
+		ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+
+		ticket.setInTime(inTime);
+		ticket.setOutTime(outTime);
+		ticket.setParkingSpot(parkingSpot);
+		fareCalculatorService.calculateFare(ticket);
+		assertEquals((0 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
+	}
+
 }
