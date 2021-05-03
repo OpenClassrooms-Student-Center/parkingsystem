@@ -55,7 +55,7 @@ public class ParkingServiceTest {
     @Test
     public void processExitingVehicleTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
-        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+        when(ticketDAO.getLastTicket("ABCDEF")).thenReturn(ticket);
         when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
         when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
         parkingService.processExitingVehicle();
@@ -96,7 +96,6 @@ public class ParkingServiceTest {
 
     @Test
     public void getNextParkingNumberWrongVehicleTypeTest() {
-        ParkingType parkingType = ParkingType.BIKE;
         when(inputReaderUtil.readSelection()).thenReturn(5);
         assertThrows(Exception.class, (Executable) parkingService.getNextParkingNumberIfAvailable());
     }

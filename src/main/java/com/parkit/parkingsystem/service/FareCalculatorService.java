@@ -18,7 +18,7 @@ public class FareCalculatorService {
     private static final Logger logger = LogManager.getLogger(FareCalculatorService.class);
 
     public void calculateFare(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime()))){
+        if( (ticket.getOutTime() != null) && (ticket.getOutTime().before(ticket.getInTime()))){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         double duration = calculateDuration(ticket);
@@ -31,7 +31,7 @@ public class FareCalculatorService {
     }
 
     public void applyReduction(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
+        if( (ticket.getOutTime() != null) && (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         apply30FreeMinutesReduction(ticket);
@@ -43,7 +43,7 @@ public class FareCalculatorService {
 
 
     public void apply30FreeMinutesReduction(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
+        if( (ticket.getOutTime() != null) && (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         double duration = calculateDuration(ticket);
@@ -56,7 +56,7 @@ public class FareCalculatorService {
     }
 
     public void applyRecurrentUserReduction(Ticket ticket){
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
+        if( (ticket.getOutTime() != null) && (ticket.getOutTime().before(ticket.getInTime())) ){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         double reduction = 0.05 * ticket.getPrice();
@@ -79,7 +79,7 @@ public class FareCalculatorService {
     }
 
     private double getRate(ParkingType type) {
-        Map<ParkingType, Double> rates = new HashMap();
+        Map<ParkingType, Double> rates =  new HashMap<ParkingType, Double>();
         rates.put(CAR, Fare.CAR_RATE_PER_HOUR);
         rates.put(BIKE, Fare.BIKE_RATE_PER_HOUR);
         return rates.get(type);

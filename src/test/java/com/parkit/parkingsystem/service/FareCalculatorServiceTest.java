@@ -330,6 +330,20 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
+    public void applyRecurrentUserReductionCarWith36HoursParkingTime() {
+        Date inTime = new Date();
+        inTime.setTime(System.currentTimeMillis() - (36 * 60 * 60 * 1000));
+        Date outTime = new Date();
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        ticket.setInTime(inTime);
+        ticket.setOutTime(outTime);
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket);
+        fareCalculatorService.applyRecurrentUserReduction(ticket);
+        assertEquals((36 * Fare.CAR_RATE_PER_HOUR - (0.05 * 36 * Fare.CAR_RATE_PER_HOUR)), ticket.getPrice());
+    }
+
+    @Test
     public void calculateDuration1Hour() {
         Date inTime = new Date();
         inTime.setTime(System.currentTimeMillis() - (60 * 60 * 1000));
@@ -344,9 +358,6 @@ public class FareCalculatorServiceTest {
 
     @Test
     public void calculateDurationOnMarchTimeOffset() throws ParseException {
-        TimeZone tz = TimeZone.getTimeZone("Europe/Paris");
-        TimeZone.setDefault(tz);
-        Calendar cal = Calendar.getInstance(tz, Locale.FRANCE);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.FRANCE);
         Date dateBeforeDST = df.parse("2021-03-28 01:55");
         Date dateAfterDST = df.parse("2021-03-28 02:55");
