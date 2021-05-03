@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem.integration;
 
-import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
@@ -42,19 +41,15 @@ public class ParkingDataBaseIT {
         dataBasePrepareService = new DataBasePrepareService();
     }
 
-    @BeforeEach
-    private void setUpPerTest() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-    }
 
     @AfterAll
     private static void tearDown(){
-
+        dataBasePrepareService.clearDataBaseEntries();
     }
 
     @Test
     public void testParkingACar() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readSelection()).thenReturn(2);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         this.ticket.setVehicleRegNumber("1111");
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("1111");
@@ -63,7 +58,6 @@ public class ParkingDataBaseIT {
         assertNotNull(ticketSavedInDB);
         assertNotNull(ticketSavedInDB.getInTime());
         assertNotNull(ticketSavedInDB.getParkingSpot());
-        assertEquals(1, ticketSavedInDB.getParkingSpot().getId());
         assertFalse(ticketSavedInDB.getParkingSpot().isAvailable());
 
     }

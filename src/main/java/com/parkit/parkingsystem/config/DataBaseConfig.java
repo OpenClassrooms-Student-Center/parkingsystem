@@ -5,15 +5,18 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 
+import static org.mortbay.jetty.security.Credential.MD5.digest;
+
 public class DataBaseConfig {
 
     private static final Logger logger = LogManager.getLogger("DataBaseConfig");
+    private static final String password = digest("rootroot").split(":")[1];
 
     public Connection getConnection() throws ClassNotFoundException, SQLException {
         logger.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
         return DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC", "root", "rootroot");
+                "jdbc:mysql://localhost:3306/prod?serverTimezone=UTC", "root", password);
     }
 
 

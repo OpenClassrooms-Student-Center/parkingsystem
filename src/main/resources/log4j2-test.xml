@@ -12,7 +12,6 @@
 
     <loggers>
         <root level="debug">
-            <appender-ref ref="Console" level="off"/>
             <appender-ref ref="MyFile" level="info"/>
         </root>
     </loggers>

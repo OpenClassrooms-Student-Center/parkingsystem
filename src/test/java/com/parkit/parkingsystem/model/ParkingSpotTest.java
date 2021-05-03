@@ -1,8 +1,6 @@
 package com.parkit.parkingsystem.model;
 
 import com.parkit.parkingsystem.constants.ParkingType;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,12 +18,6 @@ public class ParkingSpotTest {
         assertEquals(false, parkingSpot1.equals(parkingSpot2));
     }
 
-    @Test
-    public void equalsFalseBecauseNull() {
-        ParkingType parkingType = ParkingType.BIKE;
-        ParkingSpot parkingSpot1 = new ParkingSpot(1,parkingType, true);
-        assertEquals(false, parkingSpot1.equals(null));
-    }
 
     @Test
     public void equalsFalseBecauseAnotherClass() {
