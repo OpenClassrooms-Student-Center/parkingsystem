@@ -35,7 +35,7 @@ public class FareCalculatorService {
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
         apply30FreeMinutesReduction(ticket);
-        if (ticket.getRecurrent()) {
+        if (ticket.getIsRecurrent()) {
             System.out.println("Recurrent User 5% reduction applied.");
             applyRecurrentUserReduction(ticket);
         }

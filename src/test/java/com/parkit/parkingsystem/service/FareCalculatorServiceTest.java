@@ -405,7 +405,7 @@ public class FareCalculatorServiceTest {
         Date outTime = new Date();
         Calendar outCalendar = Calendar.getInstance();
         outCalendar.setTime(outTime);
-        ticket.setRecurrent(true);
+        ticket.setIsRecurrent(true);
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE, false);
@@ -422,7 +422,7 @@ public class FareCalculatorServiceTest {
         Date outTime = new Date();
         Calendar outCalendar = Calendar.getInstance();
         outCalendar.setTime(outTime);
-        ticket.setRecurrent(true);
+        ticket.setIsRecurrent(true);
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);

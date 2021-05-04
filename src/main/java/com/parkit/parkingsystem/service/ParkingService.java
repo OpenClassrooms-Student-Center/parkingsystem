@@ -45,7 +45,7 @@ public class ParkingService {
                 if (ticketDAO.getLastTicket(vehicleRegNumber)!=null && ticketDAO.getLastTicket(vehicleRegNumber).getOutTime()==null){
                     logger.error("Vehicle already parked.");
                     System.out.println("Vehicle already parked.");
-                } else if (savedTicket!=null && savedTicket.getOutTime()!=null && savedTicket.getRecurrent()) {
+                } else if (savedTicket!=null && savedTicket.getOutTime()!=null && savedTicket.getIsRecurrent()) {
                     System.out.println("Recurrent User New Entry");
                     saveIncomingVehicule(ticket, parkingSpot, true);
                 } else if (savedTicket==null) {
@@ -101,7 +101,7 @@ public class ParkingService {
     }
 
     private void saveIncomingVehicule(Ticket ticket, ParkingSpot parkingSpot, boolean isRecurrent) {
-        ticket.setRecurrent(isRecurrent);
+        ticket.setIsRecurrent(isRecurrent);
         ticketDAO.saveTicket(ticket);
         parkingSpot.setAvailable(false);
         parkingSpotDAO.updateParking(parkingSpot);

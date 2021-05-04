@@ -1,7 +1,12 @@
 package com.parkit.parkingsystem.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.Date;
 
+@Getter
+@Setter
 public class Ticket {
     private int id;
     private ParkingSpot parkingSpot;
@@ -12,59 +17,4 @@ public class Ticket {
     private Boolean isRecurrent;
     private Boolean lastUpdated;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public ParkingSpot getParkingSpot() {
-        return parkingSpot;
-    }
-
-    public void setParkingSpot(ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
-    }
-
-    public String getVehicleRegNumber() {
-        return vehicleRegNumber;
-    }
-
-    public void setVehicleRegNumber(String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public Date getInTime() {
-        return inTime;
-    }
-
-    public void setInTime(Date inTime) {
-        this.inTime = inTime;
-    }
-
-    public Date getOutTime() {
-        return outTime;
-    }
-
-    public void setOutTime(Date outTime) {
-        this.outTime = outTime;
-    }
-
-    public Boolean getRecurrent() { return isRecurrent; }
-
-    public void setRecurrent(Boolean recurrent) { this.isRecurrent = recurrent; }
-
-    public Boolean getLastUpdated() {  return lastUpdated; }
-
-    public void setLastUpdated(Boolean lastUpdated) { this.lastUpdated = lastUpdated; }
 }
