@@ -27,7 +27,7 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
             ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
-            ps.setBoolean(6, (ticket.getRecurrent()));
+            ps.setBoolean(6, (ticket.getIsRecurrent()));
             logger.info("Ticket saved.");
             return ps.execute();
         } catch (SQLException ex) {
@@ -58,7 +58,7 @@ public class TicketDAO {
                 ticket.setPrice(rs.getDouble(3));
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
-                ticket.setRecurrent(rs.getBoolean(6));
+                ticket.setIsRecurrent(rs.getBoolean(6));
             }
             logger.info("Ticket get.");
         } catch (SQLException ex) {
@@ -90,7 +90,7 @@ public class TicketDAO {
                 ticket.setPrice(rs.getDouble(3));
                 ticket.setInTime(rs.getTimestamp(4));
                 ticket.setOutTime(rs.getTimestamp(5));
-                ticket.setRecurrent(rs.getBoolean(6));
+                ticket.setIsRecurrent(rs.getBoolean(6));
                 ticket.setLastUpdated(rs.getBoolean(7));
             }
             logger.info("Ticket get.");
