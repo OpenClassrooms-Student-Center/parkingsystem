@@ -70,7 +70,7 @@ public class ParkingDataBaseIT {
         this.ticket.setVehicleRegNumber("1111");
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("1111");
         parkingService.processIncomingVehicle();
-        TimeUnit.MILLISECONDS.sleep(200);
+        TimeUnit.MILLISECONDS.sleep(400);
         parkingService.processExitingVehicle();
         Ticket ticketSavedInDB = ticketDAO.getTicket(ticket.getVehicleRegNumber());
         assertNotNull(ticketSavedInDB);
