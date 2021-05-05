@@ -9,8 +9,8 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 public class ParkingService {
 
@@ -33,14 +33,12 @@ public class ParkingService {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehicleRegNumber();
-                Calendar calendar = Calendar.getInstance();
-                Date inTime =   calendar.getTime();
+                Timestamp inTime = Timestamp.from(Instant.now());
                 Ticket ticket = new Ticket();
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
-                ticket.setOutTime(null);
                 Ticket savedTicket = ticketDAO.getTicket(vehicleRegNumber);
                 if (ticketDAO.getLastTicket(vehicleRegNumber)!=null && ticketDAO.getLastTicket(vehicleRegNumber).getOutTime()==null){
                     logger.error("Vehicle already parked.");
@@ -81,11 +79,11 @@ public class ParkingService {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getLastTicket(vehicleRegNumber);
-            Calendar calendar = Calendar.getInstance();
-            Date outTime = calendar.getTime();
+            Timestamp outTime = Timestamp.from(Instant.now());
             ticket.setOutTime(outTime);
             fareCalculatorService.calculateFare(ticket);
             fareCalculatorService.applyReduction(ticket);
+            ticketDAO.updateTicket(ticket);
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);

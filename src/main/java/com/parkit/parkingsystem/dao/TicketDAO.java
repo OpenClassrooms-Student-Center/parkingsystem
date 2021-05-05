@@ -26,8 +26,7 @@ public class TicketDAO {
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
-            ps.setBoolean(6, (ticket.getIsRecurrent()));
+            ps.setBoolean(5, (ticket.getIsRecurrent()));
             logger.info("Ticket saved.");
             return ps.execute();
         } catch (SQLException ex) {
@@ -111,7 +110,7 @@ public class TicketDAO {
             con = dataBaseConfig.getConnection();
             ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
-            ps.setTimestamp(2, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
+            ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));
             ps.setBoolean(3, true);
             ps.setBoolean(4, false);
             ps.setInt(5,ticket.getId());
