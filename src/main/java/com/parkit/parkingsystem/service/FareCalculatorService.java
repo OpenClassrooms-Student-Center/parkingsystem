@@ -6,6 +6,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,8 +68,8 @@ public class FareCalculatorService {
     public double calculateDuration(Ticket ticket) {
         Calendar inCalendar = Calendar.getInstance();
         Calendar outCalendar = Calendar.getInstance();
-        inCalendar.setTime(ticket.getInTime());
-        outCalendar.setTime(ticket.getOutTime());
+        inCalendar.setTime(new Date(ticket.getInTime().getTime()));
+        outCalendar.setTime(new Date(ticket.getOutTime().getTime()));
 
         double  durationHour = (outCalendar.get(Calendar.HOUR_OF_DAY) - inCalendar.get(Calendar.HOUR_OF_DAY));
         if (outCalendar.get(Calendar.DST_OFFSET)-inCalendar.get(Calendar.DST_OFFSET) == 3600000) {
