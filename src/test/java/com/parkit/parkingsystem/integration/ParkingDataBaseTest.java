@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingDataBaseIT {
+public class ParkingDataBaseTest {
 
     private static DataBaseTestConfig dataBaseTestConfig = new DataBaseTestConfig();
     private static ParkingSpotDAO parkingSpotDAO;
@@ -77,6 +77,7 @@ public class ParkingDataBaseIT {
 
     @Test
     public void testParkingLotExit(){
+    	dataBasePrepareService.clearDataBaseEntries();
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO, fareCalculator);
         parkingService.processExitingVehicle();
