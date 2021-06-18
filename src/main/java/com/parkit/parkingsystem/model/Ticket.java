@@ -11,9 +11,7 @@ public class Ticket {
     private Date inTime;
     private Date outTime;
 
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
 
     public void setId(int id) {
         this.id = id;
