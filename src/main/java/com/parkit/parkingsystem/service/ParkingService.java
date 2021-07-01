@@ -35,7 +35,7 @@ public class ParkingService {
             if(parkingSpot !=null && parkingSpot.getId() > 0) {
                 String vehicleRegNumber = getVehichleRegNumber();
                 isRecurring= ticketDAO.isRecurring(vehicleRegNumber);
-                if(isRecurring){
+                if(isRecurring ) {
                     System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount");
                 }
                     parkingSpot.setAvailable(false);
@@ -53,8 +53,8 @@ public class ParkingService {
                     System.out.println("Generated Ticket and saved in DB");
                     System.out.println("Please park your vehicle in spot number:" + parkingSpot.getId());
                     System.out.println("Recorded in-time for vehicle number:" + vehicleRegNumber + " is:" + inTime);
+                }
 
-            }
         }catch(Exception e){
             logger.error("Unable to process incoming vehicle",e);
         }
@@ -124,9 +124,11 @@ public class ParkingService {
                     System.out.println("Unable to update ticket information. Error occurred");
                 }
 
-        }catch(Exception e){
+              }catch(Exception e){
             logger.error("Unable to process exiting vehicle",e);
         }
     }
+
+
 
 }
