@@ -54,7 +54,7 @@ class TicketDAOTest {
 
 
     @Test
-    public void saveTicketTest() throws Exception {
+    public void saveTicketTestErrorExpected() throws Exception {
         Date date = new Date();
 
         try{
@@ -62,6 +62,7 @@ class TicketDAOTest {
             ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,true);
         Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
         ticket.setParkingSpot(parkingSpot);
+        ticket.setId(2);
         ticket.setVehicleRegNumber("ABCDEF");
         ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
         ticket.setOutTime(date);
@@ -81,7 +82,6 @@ class TicketDAOTest {
         Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         ticket.setParkingSpot(parkingSpot);
-        ticket.setId(1);
         ticket.setVehicleRegNumber("ABCDEF");
         ticket.setPrice(2.3);
         ticket.setInTime(timeStamp);

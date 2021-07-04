@@ -40,56 +40,27 @@ public class ParkingServiceTest {
 
 
 
-    @Test
-    public void processIncomingVehicleTestingIfParkingSpotisAvailable() {
-        Ticket ticket = new Ticket();
-        try {
-            parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-             ParkingSpot parkingSpot = mock( ParkingSpot.class);
-             ParkingSpotDAO parkingSpotDAO = mock(ParkingSpotDAO.class);
-            when(inputReaderUtil.readSelection()).thenReturn(1);
-            when(parkingSpot.getId()).thenReturn(4);
-            when(parkingSpotDAO.getNextAvailableSlot(parkingType.CAR)).thenReturn(1);
 
-            parkingSpot.setAvailable(false);
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-            ticket.setParkingSpot(parkingSpot);
-            ticket.setVehicleRegNumber("ABCDEF");
-            ticket.setPrice(0);
-            ticketDAO.saveTicket(ticket);
-            System.out.println(ticketDAO.isSaved("ABCDEF")+ "is saved");
-            System.out.println(parkingSpot.getId()+" this is your parking ID");
-            System.out.println(ticket.getVehicleRegNumber()+" your vehicle reg is");
-        } catch (Exception e) {
+    @Test
+    public void processIncomingVehicleTest() {
+        try{
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
+        Ticket ticket = new Ticket();
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticket.setParkingSpot(parkingSpot);
+        ticket.setVehicleRegNumber("ABCDEF");
+        when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        ParkingType car = ParkingType.CAR;
+        when(parkingSpotDAO.getNextAvailableSlot(car)).thenReturn(2);
+    }catch(Exception e){
             e.printStackTrace();
             throw new RuntimeException("Failed to set up test mock objects");
         }
-
         parkingService.processIncomingVehicle();
-        verify(parkingSpotDAO, Mockito.times(1)).getNextAvailableSlot(any(ParkingType.class));
-    }
-
-    @Test
-    public void processIncomingVehicleTestingIfTicketIsSaved() {
-        Ticket ticket = new Ticket();
-        try {
-            ParkingSpot parkingSpot = mock(ParkingSpot.class);
-            when(inputReaderUtil.readSelection()).thenReturn(1);
-            parkingSpotDAO.updateParking(parkingSpot);
-            ticket.setParkingSpot(parkingSpot);
-            ticket.setVehicleRegNumber("ABCDEF");
-            ticket.setPrice(0);
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
-            ticket.setOutTime(null);
-            ticketDAO.saveTicket(ticket);
-            parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-            } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Failed to set up test mock objects");
-        }
-
-        parkingService.processIncomingVehicle();
-        verify(ticketDAO, Mockito.times(1)).saveTicket(ticket);
+        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
     }
 
     @Test
