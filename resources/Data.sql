@@ -1,4 +1,5 @@
 /* Setting up PROD DB */
+DROP DATABASE IF EXISTS prod;
 create database prod;
 use prod;
 
@@ -15,6 +16,7 @@ create table ticket(
  PRICE double,
  IN_TIME DATETIME NOT NULL,
  OUT_TIME DATETIME,
+ HAS_DISCOUNT boolean DEFAULT false, -- Ajout du champ discount
  FOREIGN KEY (PARKING_NUMBER)
  REFERENCES parking(PARKING_NUMBER));
 
@@ -26,6 +28,7 @@ insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
 commit;
 
 /* Setting up TEST DB */
+DROP DATABASE IF EXISTS test;
 create database test;
 use test;
 
@@ -42,6 +45,7 @@ create table ticket(
  PRICE double,
  IN_TIME DATETIME NOT NULL,
  OUT_TIME DATETIME,
+ HAS_DISCOUNT boolean DEFAULT false, -- Ajout du champ discount
  FOREIGN KEY (PARKING_NUMBER)
  REFERENCES parking(PARKING_NUMBER));
 
