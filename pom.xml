@@ -1,19 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.parkit</groupId>
     <artifactId>parking-system</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -60,7 +55,6 @@
             <version>3.0.0</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
@@ -75,9 +69,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>
-                                        com.parkit.parkingsystem.App
-                                    </mainClass>
+                                    <mainClass> com.parkit.parkingsystem.App </mainClass>
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -133,6 +125,16 @@
                     </execution>
                     <execution>
                         <id>jacoco-report</id>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/App.*</exclude>
+                                <exclude>**/DataBaseConfig.*</exclude>
+                                <exclude>**/ParkingSpot.class</exclude>
+                                <exclude>**/InteractiveShell.class</exclude>
+                                <exclude>**/dao/*</exclude>
+                                <exclude>**/constants/*</exclude>
+                            </excludes>
+                        </configuration>
                         <phase>test</phase>
                         <goals>
                             <goal>report</goal>
@@ -142,5 +144,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
