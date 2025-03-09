@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 
 public class TicketDAO {
 
@@ -19,26 +16,29 @@ public class TicketDAO {
 
     public DataBaseConfig dataBaseConfig = new DataBaseConfig();
 
-    public boolean saveTicket(Ticket ticket){
+    public boolean saveTicket(Ticket ticket) {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-            //ps.setInt(1,ticket.getId());
-            ps.setInt(1,ticket.getParkingSpot().getId());
+
+            ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setDouble(3, ticket.getPrice());
             ps.setTimestamp(4, new Timestamp(ticket.getInTime().getTime()));
-            ps.setTimestamp(5, (ticket.getOutTime() == null)?null: (new Timestamp(ticket.getOutTime().getTime())) );
-            return ps.execute();
-        }catch (Exception ex){
-            logger.error("Error fetching next available slot",ex);
-        }finally {
+            ps.setTimestamp(5, (ticket.getOutTime() == null) ? null : new Timestamp(ticket.getOutTime().getTime()));
+
+            int rowsAffected = ps.executeUpdate(); // Devrait être > 0 si l'insertion réussit
+            logger.info("saveTicket() - Ticket enregistré ? {}", rowsAffected > 0);
+            return rowsAffected > 0;
+        } catch (Exception ex) {
+            logger.error("Error saving ticket", ex);
+        } finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
+        return false;
     }
+
 
     public Ticket getTicket(String vehicleRegNumber) {
         Connection con = null;
@@ -46,7 +46,6 @@ public class TicketDAO {
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET);
-            //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
@@ -65,8 +64,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -86,4 +85,43 @@ public class TicketDAO {
         }
         return false;
     }
-}
+    public int getNBTicket(String vehicleRegNumber) {
+        Connection con = null;
+        int ticketCount = 0;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET_COUNT);
+            //ID, VEHICLE_REG_NUMBER
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()){
+                ticketCount = rs.getInt(1);
+            }
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        }
+        catch (Exception ex){
+            logger.error("Error counting ticket for vehicle registration number{}", vehicleRegNumber, ex);
+        }
+        finally {
+            dataBaseConfig.closeConnection(con);
+
+        }
+        return ticketCount;
+    }
+    /**
+     * Supprime tous les tickets de la base de données.
+     * Utile pour réinitialiser l'état avant chaque test.
+     */
+    public void clearAllTickets() {
+        String query = "DELETE FROM ticket";
+        try (Connection con = dataBaseConfig.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.executeUpdate();
+            System.out.println("Tous les tickets ont été supprimés avec succès.");
+        } catch (SQLException | ClassNotFoundException ex) {
+            System.err.println("Erreur lors de la suppression de tous les tickets : " + ex.getMessage());
+        }
+        }
+    }
+

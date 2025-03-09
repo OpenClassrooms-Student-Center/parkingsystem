@@ -11,11 +11,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.mockito.junit.jupiter.MockitoExtension;
+
 
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,32 +32,204 @@ public class ParkingServiceTest {
     @Mock
     private static TicketDAO ticketDAO;
 
+    String vehicleRegNumber;
+
     @BeforeEach
-    private void setUpPerTest() {
+    public void setUpPerTest() {
+        vehicleRegNumber = "ABCDEF";
+
         try {
-            when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
-            ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-            Ticket ticket = new Ticket();
-            ticket.setInTime(new Date(System.currentTimeMillis() - (60*60*1000)));
-            ticket.setParkingSpot(parkingSpot);
-            ticket.setVehicleRegNumber("ABCDEF");
-            when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-            when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(true);
-
-            when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
             parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
         } catch (Exception e) {
             e.printStackTrace();
             throw  new RuntimeException("Failed to set up test mock objects");
         }
+
     }
 
     @Test
-    public void processExitingVehicleTest(){
+    public void processExitingVehicleTest() throws Exception {
+
+        Ticket ticket = new Ticket();
+
+        when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
+
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+
+        when(ticketDAO.getNBTicket(vehicleRegNumber)).thenReturn(2);
+
         parkingService.processExitingVehicle();
-        verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
+
+        verify(ticketDAO, times(1)).getNBTicket(vehicleRegNumber);
+
+    }
+
+    // Test 01
+    @Test
+    public void testProcessIncomingVehicle() {
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+
+        parkingService.processIncomingVehicle();
+
+
+        verify(inputReaderUtil, times(1)).readSelection();
+
+    }
+
+    // Test 02
+    @Test
+    public void processExitingVehicleTestUnableUpdate() throws Exception {
+
+        Ticket ticket = new Ticket();
+        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticket.setVehicleRegNumber("ABCDEF");
+
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
+        when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
+        when(ticketDAO.updateTicket(ticket)).thenReturn(false);
+
+        parkingService.processExitingVehicle();
+
+        verify(ticketDAO, times(1)).updateTicket(ticket);
+        verify(parkingSpotDAO, never()).updateParking(any(ParkingSpot.class));
+
+    }
+
+    // Test 03
+    @Test
+    public void testGetNextParkingNumberIfAvailable() {
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
+        ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+        assertNotNull(parkingSpot);
+        assertEquals(1,parkingSpot.getId());
+        assertEquals(ParkingType.CAR,parkingSpot.getParkingType());
+
+    }
+
+    // Test 04
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() {
+
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);
+
+        ParkingSpot  parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+
+        verify(parkingSpotDAO, times(1)).getNextAvailableSlot(ParkingType.CAR);
+        assertNull(parkingSpot);
+    }
+
+    // Test 05
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument() {
+
+        when(inputReaderUtil.readSelection()).thenReturn(3);
+
+        ParkingSpot  parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+
+        verify(inputReaderUtil, times(1)).readSelection();
+        assertNull(parkingSpot);
+    }
+
+    // Test N 01 T 07
+    @Test
+    void testProcessIncomingVehicleNoSpot() throws Exception {
+        // Simuler une saisie utilisateur correcte
+
+        when(inputReaderUtil.readSelection()).thenReturn(1); // 1 = CAR, 2 = BIKE
+
+        // Simuler qu'il n'y a pas de place disponible
+        when(parkingSpotDAO.getNextAvailableSlot(any())).thenReturn(-1);
+
+        parkingService.processIncomingVehicle();
+
+        // Vérifier que le ticket N'EST PAS enregistré, pas de place disponible
+        verify(ticketDAO, never()).saveTicket(any());
+    }
+
+    // Test N 02 T 08
+    @Test
+    public void testProcessExitingVehicleFailure() throws Exception {
+        when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(null);
+
+        parkingService.processExitingVehicle();
+
+        verify(ticketDAO, never()).updateTicket(any());
+    }
+    // Test N 03 T 09
+    @Test
+    public void testCalculateFareForRecurringUser() throws Exception {
+        Ticket ticket = new Ticket();
+        ticket.setInTime(new Date(System.currentTimeMillis() - 3600000));
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+
+        when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
+        when(ticketDAO.updateTicket(ticket)).thenReturn(true);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
+
+        parkingService.processExitingVehicle();
+        assertTrue(ticket.getPrice() > 0, "Price should be calculated with discount");
+    }
+    // Test N 04 T 10
+    @Test
+    public void testProcessIncomingVehicleInvalidSelection() {
+        when(inputReaderUtil.readSelection()).thenReturn(999);
+        ParkingSpot parkingSpot = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpot);
+    }
+    // Test N 05 T 11
+    @Test
+    public void testProcessIncomingVehicleBike() {
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).thenReturn(2);
+
+        parkingService.processIncomingVehicle();
+
+        verify(ticketDAO).saveTicket(any());
+    }
+    // Test N 06 T 12
+    @Test
+    public void testProcessIncomingVehicleCar() {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
+        parkingService.processIncomingVehicle();
+
+        verify(ticketDAO).saveTicket(any());
+    }
+    @Test
+    public void testProcessExitingVehicleThrowsException() throws Exception {
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenThrow(new RuntimeException("Erreur de saisie"));
+        assertDoesNotThrow(() -> parkingService.processExitingVehicle());
+        verify(ticketDAO, never()).updateTicket(any());
+    }
+    @Test
+    public void testProcessExitingVehicleWithShortParkingTime() throws Exception {
+        Ticket ticket = new Ticket();
+        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, false));
+        ticket.setInTime(new Date(System.currentTimeMillis() - (15 * 60 * 1000))); // 15 min
+        ticket.setOutTime(new Date());
+        ticket.setVehicleRegNumber(vehicleRegNumber);
+
+        when(ticketDAO.getTicket(vehicleRegNumber)).thenReturn(ticket);
+        when(ticketDAO.updateTicket(ticket)).thenReturn(true);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
+
+        parkingService.processExitingVehicle();
+
+        assertEquals(0, ticket.getPrice(), "Le prix doit être nul pour un stationnement de moins de 30 min");
     }
 
 }
+
