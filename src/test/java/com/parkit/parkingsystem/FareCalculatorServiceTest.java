@@ -14,8 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
 
 import java.util.Date;
 
@@ -23,8 +21,6 @@ public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
-    private ParkingSpotDAO parkingSpotDAO;
-    private TicketDAO ticketDAO;
 
     @BeforeAll
     private static void setUp() {

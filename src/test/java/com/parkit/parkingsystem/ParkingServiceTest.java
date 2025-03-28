@@ -91,16 +91,16 @@ public class ParkingServiceTest {
 
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         Ticket ticket = new Ticket();
-        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000))); // 1 saat önce giriş yapmış
+        ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
         ticket.setParkingSpot(parkingSpot);
         ticket.setVehicleRegNumber("ABCDEF");
 
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
-        when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false); // Ticket güncelleme başarısız
+        when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
         parkingService.processExitingVehicle();
 
-        verify(ticketDAO, times(1)).getTicket("ABCDEF"); // Ticket çağrıldı mı?
-        verify(ticketDAO, times(1)).updateTicket(any(Ticket.class)); // Güncelleme çağrıldı mı?
+        verify(ticketDAO, times(1)).getTicket("ABCDEF");
+        verify(ticketDAO, times(1)).updateTicket(any(Ticket.class));
     }
 }

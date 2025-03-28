@@ -37,9 +37,9 @@ public class FareCalculatorService {
         double price = durationInHours * ratePerHour;
 
         // Applying 5% discount
-        if (discount) {
-            price *= 0.95;
-        }
+//        if (discount) {
+//            price *= 0.95;
+//        }
         ticket.setPrice(price);
 
     }

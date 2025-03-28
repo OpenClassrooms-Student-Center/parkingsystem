@@ -58,4 +58,6 @@ public class Ticket {
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
+
+
 }

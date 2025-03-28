@@ -73,6 +73,7 @@ public class ParkingService {
         try{
             ParkingType parkingType = getVehichleType();
             parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
+
             if(parkingNumber > 0){
                 parkingSpot = new ParkingSpot(parkingNumber,parkingType, true);
             }else{
@@ -112,9 +113,9 @@ public class ParkingService {
             Date outTime = new Date();
             ticket.setOutTime(outTime);
 
-            boolean isReturningCustomer = ticketDAO.getNbTicket(vehicleRegNumber) > 1;
+            boolean isRecurrentVehicle = ticketDAO.getNbTicket(vehicleRegNumber) >= 1;
 
-            fareCalculatorService.calculateFare(ticket, isReturningCustomer);
+            fareCalculatorService.calculateFare(ticket, isRecurrentVehicle);
 
             if(ticketDAO.updateTicket(ticket)) {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
@@ -123,7 +124,7 @@ public class ParkingService {
                 System.out.println("Please pay the parking fare:" + ticket.getPrice());
                 System.out.println("Recorded out-time for vehicle number:" + ticket.getVehicleRegNumber() + " is:" + outTime);
                 // Message spécial pour les clients récurrents
-                if (isReturningCustomer) {
+                if (isRecurrentVehicle) {
                     System.out.println("Welcome back! You received a 5% discount on your fare.");
                 }
             }else{
