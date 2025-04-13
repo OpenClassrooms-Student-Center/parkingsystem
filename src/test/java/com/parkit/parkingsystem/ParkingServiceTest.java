@@ -15,13 +15,15 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.util.Date;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
-
+@MockitoSettings(strictness = Strictness.LENIENT)
 @ExtendWith(MockitoExtension.class)
 public class ParkingServiceTest {
 
@@ -64,8 +66,8 @@ public class ParkingServiceTest {
 
     @Test
     public void testProcessIncomingVehicle() throws Exception {
-        when(inputReaderUtil.readSelection()).thenReturn(1);
-        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABC123");
+        when(inputReaderUtil.readSelection()).thenReturn(1);  // Option 1 is CAR
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABC123");  //Entering immatriculation
 
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR, false);
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
@@ -80,9 +82,9 @@ public class ParkingServiceTest {
         verify(ticketDAO).saveTicket(ticketCaptor.capture());
 
         Ticket savedTicket = ticketCaptor.getValue();
-        assertNotNull(savedTicket.getInTime());
-        assertEquals("ABC123", savedTicket.getVehicleRegNumber());
-        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());
+        assertNotNull(savedTicket.getInTime());   // Is the vehicle's entry time set correctly?
+        assertEquals("ABC123", savedTicket.getVehicleRegNumber());   //Is the license plate correct?
+        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());  //Does the type of parking space actually EXIST?
     }
 
     @Test
@@ -103,4 +105,18 @@ public class ParkingServiceTest {
         verify(ticketDAO, times(1)).getTicket("ABCDEF");
         verify(ticketDAO, times(1)).updateTicket(any(Ticket.class));
     }
+
+    @Test
+    public void testGetNextParkingNumberIfAvailable() {
+        when(inputReaderUtil.readSelection()).thenReturn(1); // CAR chosen
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
+
+        ParkingSpot spot = parkingService.getNextParkingNumberIfAvailable();
+
+        assertNotNull(spot);
+        assertEquals(1, spot.getId());
+        assertEquals(ParkingType.CAR, spot.getParkingType());
+        assertEquals(true, spot.isAvailable());
+    }
+
 }

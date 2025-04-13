@@ -38,17 +38,6 @@ public class ParkingService {
                     throw new IllegalArgumentException("Error registering your ticket in the database. Your registration number is already in the database");
                 }
 
-
-
-
-
-
-
-
-
-
-
-
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
