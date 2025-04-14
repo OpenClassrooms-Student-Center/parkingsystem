@@ -82,9 +82,9 @@ public class ParkingServiceTest {
         verify(ticketDAO).saveTicket(ticketCaptor.capture());
 
         Ticket savedTicket = ticketCaptor.getValue();
-        assertNotNull(savedTicket.getInTime());   // Is the vehicle's entry time set correctly?
-        assertEquals("ABC123", savedTicket.getVehicleRegNumber());   //Is the license plate correct?
-        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());  //Does the type of parking space actually EXIST?
+        assertNotNull(savedTicket.getInTime());   // we check is the vehicle's entry time set correctly?
+        assertEquals("ABC123", savedTicket.getVehicleRegNumber());   //iius the license plate correct
+        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());  //we verify that does the type of parking space actually EXIST
     }
 
     @Test
@@ -119,4 +119,22 @@ public class ParkingServiceTest {
         assertEquals(true, spot.isAvailable());
     }
 
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberNotFound() throws Exception {
+        when(inputReaderUtil.readSelection()).thenReturn(1); // CAR
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(-1);   //la méthode renvoie null
+
+        ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();
+
+        assertEquals(null, result);
+    }
+
+    @Test
+    public void testGetNextParkingNumberIfAvailableParkingNumberWrongArgument () throws Exception {
+        when(inputReaderUtil.readSelection()).thenReturn(3); // l’utilisateur a saisi 3
+
+        ParkingSpot result = parkingService.getNextParkingNumberIfAvailable();
+
+        assertEquals(null, result);
+    }
 }
