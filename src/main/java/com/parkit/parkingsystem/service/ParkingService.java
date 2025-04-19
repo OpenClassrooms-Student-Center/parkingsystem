@@ -104,7 +104,7 @@ public class ParkingService {
                     System.out.println("You received a 5% discount on your fare.");
                 }
             } else {
-                System.out.println("Unable to update ticket information. Error occurred");
+                System.err.println("Unable to update ticket information. Error occurred");
             }
         } catch (Exception e) {
             logger.error("Unable to process exiting vehicle", e);
