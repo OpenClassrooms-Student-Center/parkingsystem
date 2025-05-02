@@ -35,6 +35,14 @@ AVAILABLE bool NOT NULL,
 TYPE varchar(10) NOT NULL
 );
 
+-- set enum type
+create table parking
+(
+    PARKING_NUMBER int PRIMARY KEY,
+    AVAILABLE      bool        NOT NULL,
+    TYPE           ENUM('CAR', 'BIKE') NOT NULL
+);
+
 create table ticket(
  ID int PRIMARY KEY AUTO_INCREMENT,
  PARKING_NUMBER int NOT NULL,
@@ -51,3 +59,10 @@ insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
 commit;
+
+use test;
+TRUNCATE TABLE ticket;
+TRUNCATE TABLE parking;
+
+select * from parking;
+select * from ticket;

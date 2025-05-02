@@ -111,4 +111,16 @@ public class Ticket {
     private boolean isLessThanOrEqualTo30Min(Duration duration) {
         return duration.toMinutes() <= 30;
     }
+
+    @Override
+    public String toString() {
+        return "Ticket{" +
+                "id=" + id +
+                ", vehicleRegNumber='" + vehicleRegNumber + '\'' +
+                ", price=" + price +
+                ", inTime=" + inTime +
+                ", outTime=" + outTime +
+                ", discount=" + discount +
+                '}';
+    }
 }

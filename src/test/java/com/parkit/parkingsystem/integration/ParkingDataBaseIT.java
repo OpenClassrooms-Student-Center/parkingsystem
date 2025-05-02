@@ -1,4 +1,5 @@
 package com.parkit.parkingsystem.integration;
+
 import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
@@ -15,8 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import static junit.framework.Assert.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +35,7 @@ public class ParkingDataBaseIT {
     private InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    public static void setUp() throws Exception {
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -41,32 +44,34 @@ public class ParkingDataBaseIT {
     }
 
     @BeforeEach
-    private void setUpPerTest() throws Exception {
+    public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
         dataBasePrepareService.clearDataBaseEntries();
     }
 
     @AfterAll
-    private static void tearDown(){
+    public static void tearDown() {
 
     }
 
     @Test
-    public void testParkingACar() throws Exception {
+    void testParkingACar() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
-        //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
 
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
-        assertNotNull(ticket, "The ticket should be saved in the databasee.");
-        assertEquals("ABCDEF", ticket.getVehicleRegNumber(), "The license plate number does not matchhh");
+        // check ticket saved in DB
+        assertThat(ticket).isNotNull();
+        assertThat(ticket.getVehicleRegNumber()).isEqualTo("ABCDEF");
 
+        // check parking table updated with availability
         int nextAvailableSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
-        assertFalse(nextAvailableSlot == ticket.getParkingSpot().getId(), "The parking space should be marked as not available.");
+        assertNotEquals(nextAvailableSlot, ticket.getParkingSpot().getId(), "The parking space should be marked as not available.");
+
     }
 
     @Test
@@ -83,8 +88,6 @@ public class ParkingDataBaseIT {
         double expectedFare = Fare.CAR_RATE_PER_HOUR;
         assertEquals(expectedFare, ticket.getPrice(), 0.01);
     }
-
-
 
 
 }
