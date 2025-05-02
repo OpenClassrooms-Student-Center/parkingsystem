@@ -75,6 +75,9 @@ public class TicketDAO {
         Connection con = null;
         try {
             con = dataBaseConfig.getConnection();
+            if (ticket.getOutTime() == null) {
+                throw new IllegalArgumentException("Cannot update ticket: outTime is null.");
+            }
             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET);
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, new Timestamp(ticket.getOutTime().getTime()));

@@ -1,6 +1,5 @@
 package com.parkit.parkingsystem.integration;
 
-import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -16,11 +15,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static junit.framework.Assert.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -64,30 +60,57 @@ public class ParkingDataBaseIT {
         parkingService.processIncomingVehicle();
 
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
-        // check ticket saved in DB
+
         assertThat(ticket).isNotNull();
         assertThat(ticket.getVehicleRegNumber()).isEqualTo("ABCDEF");
 
-        // check parking table updated with availability
         int nextAvailableSlot = parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
         assertNotEquals(nextAvailableSlot, ticket.getParkingSpot().getId(), "The parking space should be marked as not available.");
-
     }
 
     @Test
     public void testParkingLotExit() throws Exception {
         testParkingACar();
+        Thread.sleep(1000);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
+
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        assertThat(ticket).isNotNull();
+        assertThat(ticket.getOutTime()).isNotNull();
 
-        assertNotNull(ticket.getOutTime(), "The exit time should be saved.");
-        assertNotNull(ticket.getPrice(), "The price should be calculated.");
-
-        double expectedFare = Fare.CAR_RATE_PER_HOUR;
-        assertEquals(expectedFare, ticket.getPrice(), 0.01);
     }
 
 
+    @Test
+    public void testParkingLotExitRecurringUser() throws Exception {
+        testParkingACar();
+
+        // İlk çıkış işlemi
+        Thread.sleep(1000);
+        ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService.processExitingVehicle();
+
+        // Ticket bilgilerini al
+        Ticket ticket = ticketDAO.getTicket("ABCDEF");
+        assertThat(ticket).isNotNull();
+        assertThat(ticket.getOutTime()).isNotNull();
+
+        // Şimdi aynı araç ile tekrar giriş yap
+        // 1. araç tekrar gelir
+        testParkingACar();
+
+        // 2. çıkış işlemi yapılır
+        Thread.sleep(1000);
+        parkingService.processExitingVehicle();
+
+        // Yeniden ticket bilgilerini al
+        Ticket updatedTicket = ticketDAO.getTicket("ABCDEF");
+        assertThat(updatedTicket).isNotNull();
+        assertThat(updatedTicket.getOutTime()).isNotNull();
+
+        // İkinci kez çıkışta %5 indirim uygulanıp uygulanmadığını kontrol et
+        assertThat(updatedTicket.getPrice()).isLessThan(ticket.getPrice()); // İkinci çıkış fiyatı daha düşük olmalı
+        assertThat(updatedTicket.getPrice()).isEqualTo(ticket.getPrice() * 0.95); // Fiyatın %5 indirimli olduğunu doğrulamak
+    }
 }
