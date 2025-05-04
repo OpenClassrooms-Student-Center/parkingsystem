@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
+import com.parkit.parkingsystem.constants.Fare;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.offset;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
@@ -78,39 +80,31 @@ public class ParkingDataBaseIT {
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
         assertThat(ticket).isNotNull();
         assertThat(ticket.getOutTime()).isNotNull();
-
     }
-
 
     @Test
     public void testParkingLotExitRecurringUser() throws Exception {
-        testParkingACar();
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
-        // İlk çıkış işlemi
-        Thread.sleep(1000);
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+        parkingService.processIncomingVehicle();
+        Thread.sleep(2000);
         parkingService.processExitingVehicle();
 
-        // Ticket bilgilerini al
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
+        parkingService.processIncomingVehicle();
+        Thread.sleep(2000);
+        parkingService.processExitingVehicle();
+
         Ticket ticket = ticketDAO.getTicket("ABCDEF");
+
         assertThat(ticket).isNotNull();
         assertThat(ticket.getOutTime()).isNotNull();
 
-        // Şimdi aynı araç ile tekrar giriş yap
-        // 1. araç tekrar gelir
-        testParkingACar();
-
-        // 2. çıkış işlemi yapılır
-        Thread.sleep(1000);
-        parkingService.processExitingVehicle();
-
-        // Yeniden ticket bilgilerini al
-        Ticket updatedTicket = ticketDAO.getTicket("ABCDEF");
-        assertThat(updatedTicket).isNotNull();
-        assertThat(updatedTicket.getOutTime()).isNotNull();
-
-        // İkinci kez çıkışta %5 indirim uygulanıp uygulanmadığını kontrol et
-        assertThat(updatedTicket.getPrice()).isLessThan(ticket.getPrice()); // İkinci çıkış fiyatı daha düşük olmalı
-        assertThat(updatedTicket.getPrice()).isEqualTo(ticket.getPrice() * 0.95); // Fiyatın %5 indirimli olduğunu doğrulamak
+        double duration = (ticket.getOutTime().getTime() - ticket.getInTime().getTime()) / (60.0 * 60.0 * 1000.0);
+        double expected = duration * Fare.CAR_RATE_PER_HOUR * 0.95;
+        assertThat(ticket.getPrice()).isEqualTo(expected, offset(0.01));
     }
 }
