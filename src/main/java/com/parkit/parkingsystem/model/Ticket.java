@@ -104,10 +104,6 @@ public class Ticket {
         return Math.toIntExact(duration.toHours());
     }
 
-    private boolean isLessThanOrEqualTo30Min(double duration) {
-        return duration <= THIRTY_MINUTES;
-    }
-
     private boolean isLessThanOrEqualTo30Min(Duration duration) {
         return duration.toMinutes() <= 30;
     }
