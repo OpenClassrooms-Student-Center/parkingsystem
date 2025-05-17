@@ -164,6 +164,7 @@ class FareCalculatorServiceTest {
         assertEquals((0 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice());
     }
 
+    //======================== Etape %5 de remise
     @Test
     public void calculateFareCarWithDiscountDescription() {
         Date inTime = new Date();
