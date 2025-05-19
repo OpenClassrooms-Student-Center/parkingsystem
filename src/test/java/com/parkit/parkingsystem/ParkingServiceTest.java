@@ -10,7 +10,6 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 
 import junit.framework.Assert;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -95,9 +94,9 @@ public class ParkingServiceTest {
         verify(ticketDAO).saveTicket(ticketCaptor.capture());
 
         Ticket savedTicket = ticketCaptor.getValue();
-        assertNotNull(savedTicket.getInTime());   // we check is the vehicle's entry time set correctly?
-        assertEquals("ABC123", savedTicket.getVehicleRegNumber());   //iius the license plate correct
-        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());  //we verify that does the type of parking space actually EXIST
+        assertNotNull(savedTicket.getInTime());
+        assertEquals("ABC123", savedTicket.getVehicleRegNumber());
+        assertEquals(ParkingType.CAR, savedTicket.getParkingSpot().getParkingType());
     }
 
     @Test
